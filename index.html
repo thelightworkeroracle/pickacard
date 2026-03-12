@@ -1,84 +1,118 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>The Lightworkers Oracle</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lightworkers Oracle</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Lora&display=swap" rel="stylesheet">
 
 <style>
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
 body{
-font-family:Arial,sans-serif;
-background:linear-gradient(180deg,#f5efe6,#e8dfd4,#d9cfc3);
+font-family:'Lora',serif;
+color:#fff;
 text-align:center;
+min-height:100vh;
+}
+
+/* BACKGROUND BEFORE PICK */
+.home{
+background-image:url("https://res.cloudinary.com/dqeukcxav/image/upload/v1773344230/Untitled_design_1_oudbpw.png");
+background-size:cover;
+background-position:center;
+min-height:100vh;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:flex-start;
+padding-top:80px;
+}
+
+/* BACKGROUND AFTER PICK */
+.result-screen{
+display:none;
+background-image:url("https://res.cloudinary.com/dqeukcxav/image/upload/v1773344219/Untitled_design_2_y5e04t.png");
+background-size:cover;
+background-position:center;
+min-height:100vh;
+align-items:center;
+justify-content:center;
+flex-direction:column;
 padding:40px;
-color:#3a342f;
 }
 
-#header{
+h1{
+font-family:'Playfair Display',serif;
+font-size:38px;
+margin-bottom:20px;
+}
+
+.description{
+max-width:800px;
+line-height:1.7;
 margin-bottom:40px;
+font-size:17px;
 }
 
-/* CARD AREA */
+/* CARD FAN LAYOUT */
 
-#card-grid{
+.cards{
 position:relative;
-width:900px;
-height:260px;
-margin:60px auto;
+height:300px;
+margin-top:20px;
 }
-
-/* CARD */
 
 .card{
 position:absolute;
-width:140px;
+width:120px;
 cursor:pointer;
-transition:transform .25s;
-}
-
-.card img{
-width:100%;
-border-radius:14px;
-box-shadow:0 10px 25px rgba(0,0,0,0.25);
+transition:0.3s;
 }
 
 .card:hover{
-transform:translateY(-25px) scale(1.05);
-z-index:20;
+transform:translateY(-10px) scale(1.05);
 }
 
 /* RESULT */
 
-#result{
-display:none;
-max-width:1000px;
-margin:auto;
-margin-top:60px;
-gap:40px;
-align-items:flex-start;
+.card-large{
+width:280px;
+margin-bottom:30px;
+border-radius:10px;
+box-shadow:0 8px 20px rgba(0,0,0,0.4);
 }
 
-#result img{
-width:260px;
-border-radius:14px;
-box-shadow:0 10px 25px rgba(0,0,0,0.3);
+.message{
+max-width:700px;
+font-size:18px;
+margin-bottom:20px;
 }
 
-#reading{
-text-align:left;
-background:white;
-padding:30px;
-border-radius:12px;
-line-height:1.7;
-box-shadow:0 6px 20px rgba(0,0,0,0.1);
+.reflection{
+font-size:17px;
+opacity:0.9;
 }
 
-.section{
-margin-top:15px;
+button{
+margin-top:40px;
+padding:12px 24px;
+background:#7b4b38;
+border:none;
+border-radius:6px;
+color:white;
+font-size:16px;
+cursor:pointer;
 }
 
-.section b{
-display:block;
-margin-bottom:5px;
+button:hover{
+opacity:0.9;
 }
 
 </style>
@@ -86,210 +120,144 @@ margin-bottom:5px;
 
 <body>
 
-<div id="header">
-<h1>🔮 The Lightworkers Oracle</h1>
-<p>Take a deep breath and choose the card you feel drawn to.</p>
+<div class="home" id="home">
+
+<h1>The Lightworkers Oracle – Codes of Soul Remembrance & Activation</h1>
+
+<div class="description">
+
+This is a channeled Oracle Deck for Lightworkers, spiritual leaders, healers, visionaries, and souls awakening to their mission during this time of planetary shift. It offers visual, energetic, and channeled transmissions to bypass the logical mind and awaken remembrance at the soul level.  
+
+<br><br>
+
+Through these cards, users will feel supported, guided, and inspired to walk their unique path, seed New Earth realities, and embody the highest version of themselves with ease, trust, and devotion.
+
+<br><br>
+
+To receive your guidance, take a deep breath and click on the card you feel drawn to.
+
 </div>
 
-<div id="card-grid"></div>
+<div class="cards" id="cards"></div>
 
-<div id="result">
+</div>
 
-<img id="chosen-card">
+<div class="result-screen" id="result">
 
-<div id="reading"></div>
+<img id="cardImage" class="card-large">
+
+<div class="message" id="messageText"></div>
+
+<div class="reflection" id="reflectionText"></div>
+
+<button onclick="goHome()">Draw Another Card</button>
 
 </div>
 
 <script>
 
-const backImage="https://res.cloudinary.com/dqeukcxav/image/upload/v1773237777/back_nymcit.png"
+const cardsData = [
 
-const cards=[
+{image:"https://i.postimg.cc/fb9Bcs7y/Act.png",message:"It can feel scary but you got this. You’re being guided to move the needle forward in direction of your dreams and the pathway will appear.",reflection:"What is that one thing I’m being guided to act on today?"},
 
-{
-title:"Rites of Passage",
-image:"https://res.cloudinary.com/dqeukcxav/image/upload/v1773237779/rites-of-passage_ah2ssn.png",
-affirmation:"I move through life as though I am being initiated",
-message:`Rites of Passage is the card that comes forward when you find yourself moving through a portal. We often visualise portals to be energetic but as we grow and evolve in our journey of life, we move through multiple initiations that lead us to the next part of our journey.
+{image:"https://i.postimg.cc/VLZR2vD5/Ask.png",message:"Ask and it will appear. Don’t hesitate to ask your spirit team for help.",reflection:"Is there a message I have not been open to?"},
 
-As humans we often look for absolution in everything that we encounter. We look at life and death as finite when it is anything but that. Rites of Passage is your permission slip to look at the multiple ways life is redirecting you. Life is opening up a petalled doorway for you to step into the next version of you.
+{image:"https://i.postimg.cc/Jz9Q4gwL/C0-create.png",message:"This is not an individual journey. Call in support.",reflection:"How can you become the vortex that pulls resources?"},
 
-Some of the rites of passage that you may encounter in your life are death of your old self and dissolving parts of you that you no longer resonate with, which leads to rebirth. But even then we are constantly shapeshifting into new versions of ourselves. This happens with every new chapter we open in our lives. A woman’s journey goes through multiple rites of passage starting from the maiden moving on to the mother and then stepping into the crone.
+{image:"https://i.postimg.cc/zXG7dKw9/Community.png",message:"Your soul community awaits you.",reflection:"How can you form the community you seek?"},
 
-Rites of Passage is coming forward to remind you that this is not the end but a new beginning. Don’t cling on to what you have outgrown. Allow yourself to get closure as this will enable you to release karmic ties and allow yourself to grow with grace.
+{image:"https://i.postimg.cc/T3y9xx40/Embody.png",message:"Embrace every aspect of yourself.",reflection:"Who could you become if you stopped limiting yourself?"},
 
-Goddess Kaali and aspects of the Divine Dark Feminine energies are walking this path of you to burn those versions of you and rise from the ashes. This is the point where you hold immense compassion for yourself and the journey you’ve taken to get here.
+{image:"https://i.postimg.cc/9MBPbQDm/Go-Within.png",message:"Pause and go within.",reflection:"How can you be your own safe space?"},
 
-Ancient Elders celebrated Rites of Passage as the next chapter of being and shifting into new identities. Hold on to the wisdom from the past and let go off guilt, shame and fear that holds you back.`,
-activation:"Ho raa shee ne yti u sha"
-},
+{image:"https://i.postimg.cc/3xDg6Bkb/Ground.png",message:"Ground your energy deeply.",reflection:"What are you being called to release?"},
 
-{
-title:"Multidimensionality",
-image:"https://res.cloudinary.com/dqeukcxav/image/upload/v1773237777/multidimensionality_ybyugm.png",
-affirmation:"I choose to anchor my light from different directions into the heart of Gaia",
-message:`A multidimensional being is holding the energies of being a master of the multiverse. Think of yourself as a being in a room of infinite mirrors and you will see infinite versions of yourself. Similarly, we are multidimensional beings. Every reality you can think of exists and you’re here to bridge multiple timelines.
+{image:"https://i.postimg.cc/fTy77ZDs/Held.png",message:"You are deeply supported.",reflection:"How can you lean into this support?"},
 
-Multidimensionality is the ability to be a master of the multiverses and know that you carry infinite possibilities and gifts that go beyond present, past and future lifetimes.
+{image:"https://i.postimg.cc/MZdbjXkt/Receive.png",message:"Open your heart to receive.",reflection:"How can you receive from yourself and others?"},
 
-This card carries a bleed in timelines. If you are picking this card you may be bringing forward a soul gift from another version of you. This may be causing your physical body to look for proof and validation, but you’re being asked to slow down and focus on grounding. The more you are able to ground, the easier it is going to be to anchor your gift into Gaia.
+{image:"https://i.postimg.cc/zvBhkSm7/Remember.png",message:"Your soul remembers.",reflection:"How can you access your multidimensional gifts?"},
 
-As you merge with these other versions of yourself, you may at times experience a lack of confidence or heavy emotions that spill through in your relationships.
+{image:"https://i.postimg.cc/Qd5TSdz2/Share.png",message:"Your gifts are meant to be shared.",reflection:"What does sharing your truth feel like?"},
 
-You have already ascended so the emotions that you feel are shadows creeping up and not your current identity.
+{image:"https://i.postimg.cc/brWZH79Y/Soul-Mission.png",message:"You came here with purpose.",reflection:"How is this action tied to your soul mission?"},
 
-Tapping into your multidimensional nature is key to sharing your work as a Lightworker. You already are encoded with all the gifts you seek outside of you.
+{image:"https://i.postimg.cc/mktc9LM6/Third-Eye.png",message:"Your intuition is activating.",reflection:"How can you capture the downloads you receive?"},
 
-This is your soul’s master incarnation and you now do have the powers to switch between timelines with more ease than ever before.`,
-activation:"Ey ra ee se ho na hee se"
-},
+{image:"https://i.postimg.cc/J7v0gWjM/Transmit.png",message:"You are a channel.",reflection:"How can you tune out noise to listen deeper?"},
 
-{
-title:"Spirit Allies",
-image:"https://res.cloudinary.com/dqeukcxav/image/upload/v1773237775/spirit-allies_rodsoi.png",
-affirmation:"I allow the tools I use to guide me ahead on this journey",
-message:`If you are drawn to metaphysical tools and esoteric wisdom, you are on the right path.
+{image:"https://i.postimg.cc/yYRxCrT9/Visionary.png",message:"You are birthing a new reality.",reflection:"How will today's seeds benefit humanity?"},
 
-Spirit Allies are divinational tools like crystals, oracle cards, herbs, cleansing tools and more that are often used to connect to Spirit Guides or God.
+{image:"https://i.postimg.cc/mDqL0Qz8/Weave.png",message:"You weave timelines.",reflection:"How can you birth your highest vision now?"},
 
-You are someone who connects to ancient wisdom and carries intuitive knowledge about divination tools.
+{image:"https://i.postimg.cc/SsjQTZsn/Wise-One.png",message:"Ancient wisdom flows through you.",reflection:"Which timeline keeps appearing to you?"},
 
-As a Wisdom Keeper you may feel drawn to study astrology, numerology or other sacred systems because they awaken remembrance within you.
+{image:"https://i.postimg.cc/dQyZJ1sL/Yes.png",message:"This is your confirmation.",reflection:"What fear stops you from saying YES?"}
 
-But remember: do not give your power away. The tools are here to guide you, but the magic lies within you.`,
-activation:"hurr ha rey so ne hurr sho ya kay"
-},
-
-{
-title:"Pleasure Path",
-image:"https://res.cloudinary.com/dqeukcxav/image/upload/v1773237777/pleasure-path_m2s0zg.png",
-affirmation:"I allow myself to open up and receive pleasure",
-message:`The Pleasure Path is deeply connected to Divine Feminine energies. It is about embracing softness and sensuality within you.
-
-Modern life moves quickly and often disconnects us from fully experiencing joy. This card asks you to slow down and savor life.
-
-Allow your senses to awaken. Your desires are sacred signals guiding you back to alignment.`,
-activation:"Aa se niiii reyyy ho to ke ma"
-},
-
-{
-title:"Frequency Keeper",
-image:"https://res.cloudinary.com/dqeukcxav/image/upload/v1773237776/frequency-keeper_ja6xec.png",
-affirmation:"I am a portal for transmuting frequencies",
-message:`Frequency Keepers are deeply sensitive beings who can sense energetic shifts around them.
-
-Your sensitivity is not a weakness. You are a transmuter capable of transforming energy through your presence.
-
-Learning to set strong energetic boundaries will help you protect your frequency while uplifting others.`,
-activation:"Aa lah re sheee no ya ke ri yah"
-},
-
-{
-title:"Sangha",
-image:"https://res.cloudinary.com/dqeukcxav/image/upload/v1773237777/sangha_rjix7o.png",
-affirmation:"I am calling forward my Sangha who are here to walk this path with me",
-message:`Sangha refers to soul family or spiritual community.
-
-You are not meant to walk this journey alone. Souls who resonate with your frequency will appear in your life to support your evolution.`,
-activation:"Sho ray hay sto ni ko yi pa yaaal"
-},
-
-{
-title:"Deep Sleep",
-image:"https://res.cloudinary.com/dqeukcxav/image/upload/v1773237776/deep-sleep_vzdftc.png",
-affirmation:"I embrace this season of rest",
-message:`Life happens in cycles. Just like nature moves through seasons, your soul moves through phases of action and rest.
-
-Deep Sleep represents the sacred pause between chapters. Trust the stillness. Integration and renewal are happening beneath the surface.`,
-activation:"She she ni ye ki she ri hey"
-},
-
-{
-title:"Orange Flame",
-image:"https://res.cloudinary.com/dqeukcxav/image/upload/v1773237775/orange-flame_gt08qn.png",
-affirmation:"I rise out of the ashes that once buried me",
-message:`The Orange Flame represents cleansing and rebirth.
-
-When energetic distortions or emotional heaviness cloud your field, this flame helps burn through the layers.
-
-Invoke the Orange Flame to release past energies and step into your next timeline.`,
-activation:"Shay ya ho ne do ya he ka ji ho"
-},
-
-{
-title:"The Artist",
-image:"https://res.cloudinary.com/dqeukcxav/image/upload/v1773237776/the-artist_drz0tf.png",
-affirmation:"I am a creative intuitive who is here to spread their art into the world",
-message:`The Artist simply creates.
-
-Creativity is not limited to traditional art forms. It is any expression of your unique genius.
-
-Release judgment and allow your authentic voice to flow freely.`,
-activation:"Ho hum ke ya tu re um te syha"
-},
-
-{
-title:"The System Disruptor",
-image:"https://res.cloudinary.com/dqeukcxav/image/upload/v1773237776/system-disruptor_lvg3t8.png",
-affirmation:"I am here to create my own path",
-message:`The Divergent stands out. They are here to disrupt systems that are outdated and don’t play a role on New Earth. The Divergent’s energy carries a charge, one that can really trigger those who are not able to hold a vision.
-
-The Divergent may often feel like a black sheep. Very early on in life they may come to the realisation that they are different and don’t fully fit in.
-
-The Divergent is here to create new systems and find new ways of being.
-
-Your message is to hold your vision and your path in your mind’s eye. Don’t lose sight of the bigger picture.`,
-activation:"Ul shi ke ri hu ya ja ni hi kaaash"
-}
 ]
 
-const grid=document.getElementById("card-grid")
+const cardsContainer=document.getElementById("cards")
+const home=document.getElementById("home")
+const result=document.getElementById("result")
 
-cards.forEach((card,i)=>{
+function shuffle(array){
+for(let i=array.length-1;i>0;i--){
+const j=Math.floor(Math.random()*(i+1))
+[array[i],array[j]]=[array[j],array[i]]
+}
+return array
+}
 
-const cardDiv=document.createElement("div")
-cardDiv.className="card"
+function displayCards(){
 
-cardDiv.style.left=(i*80)+"px"
+cardsContainer.innerHTML=""
 
-cardDiv.innerHTML=`<img src="${backImage}">`
+const shuffled=shuffle([...cardsData])
 
-cardDiv.onclick=function(){
+const spread=160
+const start=-((shuffled.length-1)/2)*spread
 
-document.getElementById("header").style.display="none"
-grid.style.display="none"
+shuffled.forEach((card,index)=>{
 
-document.getElementById("result").style.display="flex"
+const img=document.createElement("img")
+img.src="https://i.postimg.cc/9fzvkHjv/2.png"
+img.className="card"
 
-document.getElementById("chosen-card").src=card.image
+const x=start+index*spread
+const rotate=(index-(shuffled.length/2))*3
 
-document.getElementById("reading").innerHTML=`
+img.style.left=`calc(50% + ${x}px)`
+img.style.transform=`rotate(${rotate}deg)`
 
-<h2>${card.title}</h2>
+img.onclick=()=>showResult(card)
 
-<div class="section">
-<b>Affirmation</b>
-${card.affirmation}
-</div>
+cardsContainer.appendChild(img)
 
-<div class="section">
-<b>Message</b>
-${card.message}
-</div>
-
-<div class="section">
-<b>Activation</b>
-${card.activation}
-</div>
-
-`
+})
 
 }
 
-grid.appendChild(cardDiv)
+function showResult(card){
 
-})
+home.style.display="none"
+result.style.display="flex"
+
+document.getElementById("cardImage").src=card.image
+document.getElementById("messageText").innerText="Message: "+card.message
+document.getElementById("reflectionText").innerText="Reflection: "+card.reflection
+
+}
+
+function goHome(){
+
+result.style.display="none"
+home.style.display="flex"
+
+displayCards()
+
+}
+
+displayCards()
 
 </script>
 
