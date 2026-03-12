@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lightworkers Oracle</title>
+
+<title>The Lightworkers Oracle</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Lora&display=swap" rel="stylesheet">
 
@@ -17,116 +19,197 @@ box-sizing:border-box;
 
 body{
 font-family:'Lora',serif;
-color:#fff;
+color:white;
 text-align:center;
-min-height:100vh;
 }
 
-/* BACKGROUND BEFORE PICK */
+/* ---------------- HOME SCREEN ---------------- */
+
 .home{
+
 background-image:url("https://res.cloudinary.com/dqeukcxav/image/upload/v1773344230/Untitled_design_1_oudbpw.png");
 background-size:cover;
 background-position:center;
+
 min-height:100vh;
+padding:80px 20px;
+
 display:flex;
 flex-direction:column;
 align-items:center;
-justify-content:flex-start;
-padding-top:80px;
 }
 
-/* BACKGROUND AFTER PICK */
-.result-screen{
-display:none;
-background-image:url("https://res.cloudinary.com/dqeukcxav/image/upload/v1773344219/Untitled_design_2_y5e04t.png");
-background-size:cover;
-background-position:center;
-min-height:100vh;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-padding:40px;
+/* overlay so text becomes readable */
+
+.home::before{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.45);
+backdrop-filter:blur(4px);
+z-index:0;
+}
+
+.home *{
+position:relative;
+z-index:2;
 }
 
 h1{
 font-family:'Playfair Display',serif;
-font-size:38px;
-margin-bottom:20px;
+font-size:42px;
+margin-bottom:25px;
+max-width:900px;
 }
 
 .description{
-max-width:800px;
-line-height:1.7;
-margin-bottom:40px;
-font-size:17px;
+max-width:850px;
+line-height:1.8;
+font-size:18px;
+margin-bottom:60px;
 }
 
-/* CARD FAN LAYOUT */
+/* ---------------- CARD FAN ---------------- */
 
 .cards{
+
 position:relative;
-height:300px;
-margin-top:20px;
+height:320px;
+width:100%;
+max-width:900px;
 }
 
-.card{
+/* glow under cards */
+
+.cards::before{
+
+content:"";
 position:absolute;
+width:500px;
+height:150px;
+
+background:radial-gradient(circle, rgba(255,210,140,0.6), transparent);
+
+left:50%;
+top:160px;
+transform:translateX(-50%);
+}
+
+/* card */
+
+.card{
+
+position:absolute;
+
 width:120px;
 cursor:pointer;
+
 transition:0.3s;
 }
 
 .card:hover{
-transform:translateY(-10px) scale(1.05);
+
+transform:translateY(-12px) scale(1.05);
+
 }
 
-/* RESULT */
+/* ---------------- RESULT SCREEN ---------------- */
+
+.result-screen{
+
+display:none;
+
+background-image:url("https://res.cloudinary.com/dqeukcxav/image/upload/v1773344219/Untitled_design_2_y5e04t.png");
+background-size:cover;
+background-position:center;
+
+min-height:100vh;
+
+align-items:center;
+justify-content:center;
+flex-direction:column;
+
+padding:40px;
+}
 
 .card-large{
+
 width:280px;
-margin-bottom:30px;
 border-radius:10px;
-box-shadow:0 8px 20px rgba(0,0,0,0.4);
+box-shadow:0 10px 30px rgba(0,0,0,0.5);
+
+margin-bottom:30px;
 }
 
 .message{
-max-width:700px;
-font-size:18px;
+
+font-size:22px;
 margin-bottom:20px;
+max-width:700px;
 }
 
 .reflection{
-font-size:17px;
+
+font-size:19px;
 opacity:0.9;
+max-width:700px;
 }
 
 button{
+
 margin-top:40px;
-padding:12px 24px;
+
 background:#7b4b38;
+
 border:none;
+padding:12px 26px;
 border-radius:6px;
+
 color:white;
 font-size:16px;
 cursor:pointer;
+
 }
 
 button:hover{
+
 opacity:0.9;
+
+}
+
+/* ---------------- MOBILE ---------------- */
+
+@media(max-width:700px){
+
+h1{font-size:28px}
+
+.description{font-size:16px}
+
+.card{width:90px}
+
 }
 
 </style>
 </head>
 
+
 <body>
+
+
+<!-- HOME PAGE -->
 
 <div class="home" id="home">
 
-<h1>The Lightworkers Oracle – Codes of Soul Remembrance & Activation</h1>
+<h1>
+The Lightworkers Oracle – Codes of Soul Remembrance & Activation
+</h1>
 
 <div class="description">
 
-This is a channeled Oracle Deck for Lightworkers, spiritual leaders, healers, visionaries, and souls awakening to their mission during this time of planetary shift. It offers visual, energetic, and channeled transmissions to bypass the logical mind and awaken remembrance at the soul level.  
+This is a channeled Oracle Deck for Lightworkers, spiritual leaders, healers, visionaries, and souls awakening to their mission during this time of planetary shift. It offers visual, energetic, and channeled transmissions to bypass the logical mind and awaken remembrance at the soul level.
 
 <br><br>
 
@@ -142,6 +225,10 @@ To receive your guidance, take a deep breath and click on the card you feel draw
 
 </div>
 
+
+
+<!-- RESULT SCREEN -->
+
 <div class="result-screen" id="result">
 
 <img id="cardImage" class="card-large">
@@ -150,63 +237,65 @@ To receive your guidance, take a deep breath and click on the card you feel draw
 
 <div class="reflection" id="reflectionText"></div>
 
-<button onclick="goHome()">Draw Another Card</button>
+<button onclick="goHome()">Pick Another Card</button>
 
 </div>
 
+
+
 <script>
 
-const cardsData = [
+/* ---------------- CARD DATA ---------------- */
 
-{image:"https://i.postimg.cc/fb9Bcs7y/Act.png",message:"It can feel scary but you got this. You’re being guided to move the needle forward in direction of your dreams and the pathway will appear.",reflection:"What is that one thing I’m being guided to act on today?"},
+const cardsData=[
 
-{image:"https://i.postimg.cc/VLZR2vD5/Ask.png",message:"Ask and it will appear. Don’t hesitate to ask your spirit team for help.",reflection:"Is there a message I have not been open to?"},
+{image:"https://i.postimg.cc/fb9Bcs7y/Act.png",message:"It can feel scary but you got this. You’re being guided to move the needle forward in direction of your dreams.",reflection:"What is that one thing I’m being guided to act on today?"},
 
-{image:"https://i.postimg.cc/Jz9Q4gwL/C0-create.png",message:"This is not an individual journey. Call in support.",reflection:"How can you become the vortex that pulls resources?"},
+{image:"https://i.postimg.cc/VLZR2vD5/Ask.png",message:"Ask and it will appear. Your spirit team is waiting to help.",reflection:"Is there a message that I have not been open to?"},
 
-{image:"https://i.postimg.cc/zXG7dKw9/Community.png",message:"Your soul community awaits you.",reflection:"How can you form the community you seek?"},
+{image:"https://i.postimg.cc/J7v0gWjM/Transmit.png",message:"You are a channel for ideas and inspiration.",reflection:"How can you tune out noise and listen deeper?"},
 
-{image:"https://i.postimg.cc/T3y9xx40/Embody.png",message:"Embrace every aspect of yourself.",reflection:"Who could you become if you stopped limiting yourself?"},
-
-{image:"https://i.postimg.cc/9MBPbQDm/Go-Within.png",message:"Pause and go within.",reflection:"How can you be your own safe space?"},
-
-{image:"https://i.postimg.cc/3xDg6Bkb/Ground.png",message:"Ground your energy deeply.",reflection:"What are you being called to release?"},
-
-{image:"https://i.postimg.cc/fTy77ZDs/Held.png",message:"You are deeply supported.",reflection:"How can you lean into this support?"},
-
-{image:"https://i.postimg.cc/MZdbjXkt/Receive.png",message:"Open your heart to receive.",reflection:"How can you receive from yourself and others?"},
-
-{image:"https://i.postimg.cc/zvBhkSm7/Remember.png",message:"Your soul remembers.",reflection:"How can you access your multidimensional gifts?"},
+{image:"https://i.postimg.cc/MZdbjXkt/Receive.png",message:"Open yourself to receiving blessings.",reflection:"How can you receive more from yourself and others?"},
 
 {image:"https://i.postimg.cc/Qd5TSdz2/Share.png",message:"Your gifts are meant to be shared.",reflection:"What does sharing your truth feel like?"},
 
-{image:"https://i.postimg.cc/brWZH79Y/Soul-Mission.png",message:"You came here with purpose.",reflection:"How is this action tied to your soul mission?"},
+{image:"https://i.postimg.cc/mDqL0Qz8/Weave.png",message:"You weave timelines into reality.",reflection:"How can you birth your highest vision now?"},
 
-{image:"https://i.postimg.cc/mktc9LM6/Third-Eye.png",message:"Your intuition is activating.",reflection:"How can you capture the downloads you receive?"},
+{image:"https://i.postimg.cc/yYRxCrT9/Visionary.png",message:"You are here to birth new ways.",reflection:"How will today's seeds benefit humanity?"},
 
-{image:"https://i.postimg.cc/J7v0gWjM/Transmit.png",message:"You are a channel.",reflection:"How can you tune out noise to listen deeper?"},
+{image:"https://i.postimg.cc/SsjQTZsn/Wise-One.png",message:"Ancient wisdom lives within you.",reflection:"Which timeline keeps appearing for you?"},
 
-{image:"https://i.postimg.cc/yYRxCrT9/Visionary.png",message:"You are birthing a new reality.",reflection:"How will today's seeds benefit humanity?"},
-
-{image:"https://i.postimg.cc/mDqL0Qz8/Weave.png",message:"You weave timelines.",reflection:"How can you birth your highest vision now?"},
-
-{image:"https://i.postimg.cc/SsjQTZsn/Wise-One.png",message:"Ancient wisdom flows through you.",reflection:"Which timeline keeps appearing to you?"},
-
-{image:"https://i.postimg.cc/dQyZJ1sL/Yes.png",message:"This is your confirmation.",reflection:"What fear stops you from saying YES?"}
+{image:"https://i.postimg.cc/dQyZJ1sL/Yes.png",message:"This is your confirmation.",reflection:"What fear stops you from saying yes?"}
 
 ]
+
+
 
 const cardsContainer=document.getElementById("cards")
 const home=document.getElementById("home")
 const result=document.getElementById("result")
 
+
+
+/* shuffle cards */
+
 function shuffle(array){
+
 for(let i=array.length-1;i>0;i--){
+
 const j=Math.floor(Math.random()*(i+1))
+
 [array[i],array[j]]=[array[j],array[i]]
+
 }
+
 return array
+
 }
+
+
+
+/* show cards in fan */
 
 function displayCards(){
 
@@ -214,13 +303,15 @@ cardsContainer.innerHTML=""
 
 const shuffled=shuffle([...cardsData])
 
-const spread=160
+const spread=150
 const start=-((shuffled.length-1)/2)*spread
 
 shuffled.forEach((card,index)=>{
 
 const img=document.createElement("img")
+
 img.src="https://i.postimg.cc/9fzvkHjv/2.png"
+
 img.className="card"
 
 const x=start+index*spread
@@ -237,6 +328,10 @@ cardsContainer.appendChild(img)
 
 }
 
+
+
+/* reveal result */
+
 function showResult(card){
 
 home.style.display="none"
@@ -248,6 +343,10 @@ document.getElementById("reflectionText").innerText="Reflection: "+card.reflecti
 
 }
 
+
+
+/* go back */
+
 function goHome(){
 
 result.style.display="none"
@@ -257,9 +356,14 @@ displayCards()
 
 }
 
+
+
+/* initial load */
+
 displayCards()
 
 </script>
+
 
 </body>
 </html>
