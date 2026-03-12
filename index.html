@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,6 +20,7 @@ body{
 font-family:'Lora',serif;
 color:white;
 text-align:center;
+overflow-x:hidden;
 }
 
 /* ---------------- HOME SCREEN ---------------- */
@@ -39,7 +39,7 @@ flex-direction:column;
 align-items:center;
 }
 
-/* overlay so text becomes readable */
+/* blur overlay */
 
 .home::before{
 content:"";
@@ -69,7 +69,7 @@ max-width:900px;
 max-width:850px;
 line-height:1.8;
 font-size:18px;
-margin-bottom:60px;
+margin-bottom:70px;
 }
 
 /* ---------------- CARD FAN ---------------- */
@@ -77,43 +77,41 @@ margin-bottom:60px;
 .cards{
 
 position:relative;
-height:320px;
-width:100%;
-max-width:900px;
+height:300px;
+width:700px;
+max-width:90vw;
+margin-top:20px;
+
 }
 
 /* glow under cards */
 
 .cards::before{
-
 content:"";
 position:absolute;
-width:500px;
-height:150px;
-
-background:radial-gradient(circle, rgba(255,210,140,0.6), transparent);
-
+width:450px;
+height:120px;
+background:radial-gradient(circle, rgba(255,200,120,0.6), transparent);
 left:50%;
 top:160px;
 transform:translateX(-50%);
+z-index:1;
 }
 
-/* card */
+/* card style */
 
 .card{
 
 position:absolute;
-
 width:120px;
 cursor:pointer;
-
 transition:0.3s;
+z-index:2;
+
 }
 
 .card:hover{
-
-transform:translateY(-12px) scale(1.05);
-
+transform:translateY(-15px) scale(1.05);
 }
 
 /* ---------------- RESULT SCREEN ---------------- */
@@ -133,6 +131,7 @@ justify-content:center;
 flex-direction:column;
 
 padding:40px;
+
 }
 
 .card-large{
@@ -142,17 +141,16 @@ border-radius:10px;
 box-shadow:0 10px 30px rgba(0,0,0,0.5);
 
 margin-bottom:30px;
+
 }
 
 .message{
-
 font-size:22px;
 margin-bottom:20px;
 max-width:700px;
 }
 
 .reflection{
-
 font-size:19px;
 opacity:0.9;
 max-width:700px;
@@ -161,13 +159,10 @@ max-width:700px;
 button{
 
 margin-top:40px;
-
 background:#7b4b38;
-
 border:none;
 padding:12px 26px;
 border-radius:6px;
-
 color:white;
 font-size:16px;
 cursor:pointer;
@@ -175,12 +170,8 @@ cursor:pointer;
 }
 
 button:hover{
-
 opacity:0.9;
-
 }
-
-/* ---------------- MOBILE ---------------- */
 
 @media(max-width:700px){
 
@@ -190,11 +181,12 @@ h1{font-size:28px}
 
 .card{width:90px}
 
+.cards{height:240px}
+
 }
 
 </style>
 </head>
-
 
 <body>
 
@@ -245,57 +237,43 @@ To receive your guidance, take a deep breath and click on the card you feel draw
 
 <script>
 
-/* ---------------- CARD DATA ---------------- */
+/* CARD DATA */
 
 const cardsData=[
 
-{image:"https://i.postimg.cc/fb9Bcs7y/Act.png",message:"It can feel scary but you got this. You’re being guided to move the needle forward in direction of your dreams.",reflection:"What is that one thing I’m being guided to act on today?"},
+{image:"https://i.postimg.cc/fb9Bcs7y/Act.png",message:"It can feel scary but you got this.",reflection:"What is that one thing I’m being guided to act on today?"},
 
-{image:"https://i.postimg.cc/VLZR2vD5/Ask.png",message:"Ask and it will appear. Your spirit team is waiting to help.",reflection:"Is there a message that I have not been open to?"},
+{image:"https://i.postimg.cc/VLZR2vD5/Ask.png",message:"Ask and it will appear.",reflection:"Is there a message I have not been open to?"},
 
-{image:"https://i.postimg.cc/J7v0gWjM/Transmit.png",message:"You are a channel for ideas and inspiration.",reflection:"How can you tune out noise and listen deeper?"},
+{image:"https://i.postimg.cc/J7v0gWjM/Transmit.png",message:"You are a channel.",reflection:"How can you listen deeper?"},
 
-{image:"https://i.postimg.cc/MZdbjXkt/Receive.png",message:"Open yourself to receiving blessings.",reflection:"How can you receive more from yourself and others?"},
+{image:"https://i.postimg.cc/MZdbjXkt/Receive.png",message:"Be open to receiving.",reflection:"How can you receive more?"},
 
-{image:"https://i.postimg.cc/Qd5TSdz2/Share.png",message:"Your gifts are meant to be shared.",reflection:"What does sharing your truth feel like?"},
+{image:"https://i.postimg.cc/Qd5TSdz2/Share.png",message:"Your gifts are meant to be shared.",reflection:"What does sharing feel like?"},
 
-{image:"https://i.postimg.cc/mDqL0Qz8/Weave.png",message:"You weave timelines into reality.",reflection:"How can you birth your highest vision now?"},
+{image:"https://i.postimg.cc/mDqL0Qz8/Weave.png",message:"You weave timelines.",reflection:"How can you birth your highest vision?"},
 
-{image:"https://i.postimg.cc/yYRxCrT9/Visionary.png",message:"You are here to birth new ways.",reflection:"How will today's seeds benefit humanity?"},
+{image:"https://i.postimg.cc/yYRxCrT9/Visionary.png",message:"You are here to birth new ways.",reflection:"How will today's seeds help humanity?"},
 
-{image:"https://i.postimg.cc/SsjQTZsn/Wise-One.png",message:"Ancient wisdom lives within you.",reflection:"Which timeline keeps appearing for you?"},
+{image:"https://i.postimg.cc/SsjQTZsn/Wise-One.png",message:"Ancient wisdom flows through you.",reflection:"Which timeline keeps appearing?"},
 
 {image:"https://i.postimg.cc/dQyZJ1sL/Yes.png",message:"This is your confirmation.",reflection:"What fear stops you from saying yes?"}
 
 ]
 
-
-
 const cardsContainer=document.getElementById("cards")
 const home=document.getElementById("home")
 const result=document.getElementById("result")
 
-
-
-/* shuffle cards */
-
 function shuffle(array){
 
 for(let i=array.length-1;i>0;i--){
-
 const j=Math.floor(Math.random()*(i+1))
-
 [array[i],array[j]]=[array[j],array[i]]
-
 }
 
 return array
-
 }
-
-
-
-/* show cards in fan */
 
 function displayCards(){
 
@@ -303,8 +281,8 @@ cardsContainer.innerHTML=""
 
 const shuffled=shuffle([...cardsData])
 
-const spread=150
-const start=-((shuffled.length-1)/2)*spread
+const spread=70
+const center=cardsContainer.offsetWidth/2
 
 shuffled.forEach((card,index)=>{
 
@@ -314,11 +292,10 @@ img.src="https://i.postimg.cc/9fzvkHjv/2.png"
 
 img.className="card"
 
-const x=start+index*spread
-const rotate=(index-(shuffled.length/2))*3
+const offset=(index-(shuffled.length/2))*spread
 
-img.style.left=`calc(50% + ${x}px)`
-img.style.transform=`rotate(${rotate}deg)`
+img.style.left=`calc(50% + ${offset}px)`
+img.style.transform=`rotate(${offset/12}deg)`
 
 img.onclick=()=>showResult(card)
 
@@ -327,10 +304,6 @@ cardsContainer.appendChild(img)
 })
 
 }
-
-
-
-/* reveal result */
 
 function showResult(card){
 
@@ -343,10 +316,6 @@ document.getElementById("reflectionText").innerText="Reflection: "+card.reflecti
 
 }
 
-
-
-/* go back */
-
 function goHome(){
 
 result.style.display="none"
@@ -356,14 +325,9 @@ displayCards()
 
 }
 
-
-
-/* initial load */
-
 displayCards()
 
 </script>
-
 
 </body>
 </html>
