@@ -83,9 +83,10 @@ body::before {
 
 /* ═══════════════ PAGE 2 — SPREAD ═══════════════ */
 #page-spread {
-  justify-content: flex-end;
-  padding-bottom: 0;
+  justify-content: flex-start;
+  padding: 0;
   overflow: hidden;
+  position: relative;
 }
 .spread-header {
   position: absolute; top: 36px; left: 0; right: 0;
@@ -99,9 +100,8 @@ body::before {
 /* THE FAN — all cards share ONE pivot at bottom-centre */
 #fan-stage {
   position: relative;
-  width: 100vw;
-  /* height set by JS */
   flex-shrink: 0;
+  overflow: visible;
 }
 
 .card {
@@ -358,62 +358,69 @@ function buildFan() {
   const stage = document.getElementById('fan-stage');
   stage.innerHTML = '';
 
-  // 30-card deck: 3 copies of each card, positions randomised each shuffle
   const shuffled = [...cards, ...cards, ...cards].sort(() => Math.random() - 0.5);
-  const n = shuffled.length; // 30
+  const n = shuffled.length;
   const W = window.innerWidth;
   const H = window.innerHeight;
 
-  // Card dimensions — slightly narrower so 30 cards fan nicely
-  const cardW = Math.min(105, Math.max(58, W / 11));
-  const cardH = cardW * 1.7;
+  stage.style.width  = W + 'px';
+  stage.style.height = H + 'px';
+  stage.style.position = 'relative';
+  stage.style.overflow = 'visible';
 
-  // Stage fills viewport
-  const stageW = W;
-  const stageH = H * 0.82;
-  stage.style.width  = stageW + 'px';
-  stage.style.height = stageH + 'px';
+  // Card size — big enough to actually see, like reference image
+  const cardH = Math.min(H * 0.55, 320);
+  const cardW = cardH / 1.65;
 
-  // Pivot = bottom-centre of stage
-  const pivotX = stageW / 2;
-  const pivotY = stageH + cardH * 0.28;
+  // Pivot sits at the very bottom-centre of the viewport
+  // All cards bottom-centre meet here, then rotate outward
+  const pivotX = W / 2;
+  const pivotY = H + 20; // just below viewport bottom
 
-  // Fan arc: wider spread for 30 cards — -78deg to +78deg (156deg total)
-  const halfArc = 78;
-  const startAngle = -halfArc;
-  const endAngle   =  halfArc;
+  // Arc: -65° to +65° (130° total) — like the reference card fan
+  const halfArc = 65;
 
   shuffled.forEach((card, i) => {
     const pct = n === 1 ? 0.5 : i / (n - 1);
-    const angleDeg = startAngle + pct * (endAngle - startAngle);
+    const angleDeg = -halfArc + pct * halfArc * 2;
 
-    // ALL cards start at the same position: pivot point
-    // Card bottom-centre sits at pivot
+    // Place every card with its bottom-centre at the pivot
     const left = pivotX - cardW / 2;
     const top  = pivotY - cardH;
 
     const div = document.createElement('div');
     div.className = 'card';
-    div.style.width  = cardW + 'px';
-    div.style.height = cardH + 'px';
-    div.style.left   = left + 'px';
-    div.style.top    = top  + 'px';
-    // Rotate around the bottom-centre of the card (which sits at pivot)
-    div.style.transformOrigin = '50% 100%';
-    div.style.transform       = `rotate(${angleDeg}deg)`;
-    div.style.zIndex          = i + 1;
-    div.style.animationDelay  = (i * 0.025) + 's';
+    div.style.cssText = `
+      position:absolute;
+      width:${cardW}px;
+      height:${cardH}px;
+      left:${left}px;
+      top:${top}px;
+      transform-origin:50% 100%;
+      transform:rotate(${angleDeg}deg);
+      z-index:${i + 1};
+      animation-delay:${(i * 0.018).toFixed(3)}s;
+      border-radius:10px;
+      overflow:hidden;
+      box-shadow:2px 2px 8px rgba(0,0,0,0.35);
+      cursor:pointer;
+    `;
 
-    div.innerHTML = `<img src="${backImage}" alt="card" style="width:100%;height:100%;object-fit:cover;border-radius:9px;">`;
+    const img = document.createElement('img');
+    img.src = backImage;
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;';
+    div.appendChild(img);
 
     div.addEventListener('mouseenter', () => {
-      div.style.transform = `rotate(${angleDeg}deg) translateY(-32px) scale(1.08)`;
-      div.style.zIndex = 80;
-      div.style.filter = 'drop-shadow(0 16px 28px rgba(100,55,5,0.55)) brightness(1.1)';
+      div.style.transform = `rotate(${angleDeg}deg) translateY(-30px) scale(1.1)`;
+      div.style.zIndex = 200;
+      div.style.boxShadow = '0 20px 40px rgba(80,40,0,0.5)';
+      div.style.filter = 'brightness(1.12)';
     });
     div.addEventListener('mouseleave', () => {
       div.style.transform = `rotate(${angleDeg}deg)`;
       div.style.zIndex = i + 1;
+      div.style.boxShadow = '2px 2px 8px rgba(0,0,0,0.35)';
       div.style.filter = '';
     });
 
