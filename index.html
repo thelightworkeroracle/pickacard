@@ -22,7 +22,6 @@ body {
     linear-gradient(145deg, #faf3e3 0%, #eedfc7 30%, #e2cfb4 60%, #d4ba92 100%);
 }
 
-/* satin sheen */
 body::before {
   content: '';
   position: fixed;
@@ -37,7 +36,6 @@ body::before {
   );
 }
 
-/* shared page wrapper */
 .page {
   position: relative;
   z-index: 1;
@@ -45,12 +43,11 @@ body::before {
   display: none;
   flex-direction: column;
   align-items: center;
+  opacity: 0;
+  transition: opacity 0.6s;
 }
 .page.active { display: flex; }
-
-/* fade in/out */
-.page { opacity: 0; transition: opacity 0.65s; }
-.page.shown { opacity: 1; }
+.page.shown  { opacity: 1; }
 
 /* ═══════════════════════════════
    PAGE 1 — INTRO
@@ -127,13 +124,13 @@ body::before {
    PAGE 2 — CARD SPREAD
 ═══════════════════════════════ */
 #page-spread {
-  justify-content: flex-start;
-  padding: 36px 0 0;
+  justify-content: center;
+  padding: 30px 0 40px;
 }
 
 .spread-header {
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
   padding: 0 20px;
 }
 
@@ -144,30 +141,39 @@ body::before {
   letter-spacing: 0.04em;
 }
 
-/* Fan container */
+/* Fan wrapper — scrolls horizontally on very small screens */
+#fan-wrap {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+/* Fan canvas */
 #card-fan {
   position: relative;
-  width: 100%;
-  flex: 1;
-  /* height set by JS */
+  flex-shrink: 0;
+  /* width & height set by JS */
 }
 
 .card {
   position: absolute;
   cursor: pointer;
-  transform-origin: center bottom;
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.28));
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.22));
   opacity: 0;
   animation: cardIn 0.4s forwards;
-  transition: filter 0.2s;
+  transition: filter 0.2s, transform 0.22s;
 }
 .card img {
   width: 100%;
   border-radius: 8px;
   display: block;
+  pointer-events: none;
 }
 .card:hover {
-  filter: drop-shadow(0 14px 22px rgba(100,60,10,0.45)) brightness(1.08);
+  filter: drop-shadow(0 12px 20px rgba(100,60,10,0.45)) brightness(1.08);
   z-index: 80 !important;
 }
 @keyframes cardIn {
@@ -192,7 +198,6 @@ body::before {
   gap: 22px;
 }
 
-/* card image */
 #result-img {
   width: min(270px, 70vw);
   border-radius: 16px;
@@ -213,7 +218,6 @@ body::before {
   text-align: center;
 }
 
-/* reading panel */
 #reading-panel {
   width: 100%;
   background: rgba(255, 253, 246, 0.94);
@@ -266,7 +270,6 @@ body::before {
   line-height: 1.7;
 }
 
-/* bottom button */
 .again-btn {
   font-family: 'Times New Roman', Times, serif;
   font-size: 0.9rem;
@@ -289,7 +292,7 @@ body::before {
 </head>
 <body>
 
-<!-- ═══ PAGE 1 — INTRO ═══ -->
+<!-- PAGE 1 — INTRO -->
 <div class="page" id="page-intro">
   <div class="intro-inner">
     <h1>The Lightworkers Oracle</h1>
@@ -304,21 +307,21 @@ body::before {
   </div>
 </div>
 
-<!-- ═══ PAGE 2 — SPREAD ═══ -->
+<!-- PAGE 2 — SPREAD -->
 <div class="page" id="page-spread">
   <div class="spread-header">
     <p>Take a deep breath &amp; click the card you feel drawn to</p>
   </div>
-  <div id="card-fan"></div>
+  <div id="fan-wrap">
+    <div id="card-fan"></div>
+  </div>
 </div>
 
-<!-- ═══ PAGE 3 — READING ═══ -->
+<!-- PAGE 3 — READING -->
 <div class="page" id="page-reading">
   <div class="reading-inner">
-
     <img id="result-img" src="" alt="Your card">
     <div id="result-title"></div>
-
     <div id="reading-panel">
       <div class="r-block">
         <span class="r-label">Affirmation</span>
@@ -335,9 +338,7 @@ body::before {
         <div class="r-activation" id="rp-activation"></div>
       </div>
     </div>
-
     <button class="again-btn" onclick="goToSpread()">✦ Choose Another Card ✦</button>
-
   </div>
 </div>
 
@@ -346,11 +347,7 @@ body::before {
 const backImage = "https://res.cloudinary.com/dqeukcxav/image/upload/v1773237777/back_nymcit.png";
 
 const cards = [
-  {
-    title: "Rites of Passage",
-    image: "https://res.cloudinary.com/dqeukcxav/image/upload/v1773237779/rites-of-passage_ah2ssn.png",
-    affirmation: "I move through life as though I am being initiated",
-    message: `Rites of Passage is the card that comes forward when you find yourself moving through a portal. We often visualise portals to be energetic but as we grow and evolve in our journey of life, we move through multiple initiations that lead us to the next part of our journey.
+  { title:"Rites of Passage", image:"https://res.cloudinary.com/dqeukcxav/image/upload/v1773237779/rites-of-passage_ah2ssn.png", affirmation:"I move through life as though I am being initiated", message:`Rites of Passage is the card that comes forward when you find yourself moving through a portal. We often visualise portals to be energetic but as we grow and evolve in our journey of life, we move through multiple initiations that lead us to the next part of our journey.
 
 As humans we often look for absolution in everything that we encounter. We look at life and death as finite when it is anything but that. Rites of Passage is your permission slip to look at the multiple ways life is redirecting you. Life is opening up a petalled doorway for you to step into the next version of you.
 
@@ -360,14 +357,9 @@ Rites of Passage is coming forward to remind you that this is not the end but a 
 
 Goddess Kaali and aspects of the Divine Dark Feminine energies are walking this path of you to burn those versions of you and rise from the ashes. This is the point where you hold immense compassion for yourself and the journey you've taken to get here.
 
-Ancient Elders celebrated Rites of Passage as the next chapter of being and shifting into new identities. Hold on to the wisdom from the past and let go off guilt, shame and fear that holds you back.`,
-    activation: "Ho raa shee ne yti u sha"
-  },
-  {
-    title: "Multidimensionality",
-    image: "https://res.cloudinary.com/dqeukcxav/image/upload/v1773237777/multidimensionality_ybyugm.png",
-    affirmation: "I choose to anchor my light from different directions into the heart of Gaia",
-    message: `A multidimensional being is holding the energies of being a master of the multiverse. Think of yourself as a being in a room of infinite mirrors and you will see infinite versions of yourself. Similarly, we are multidimensional beings. Every reality you can think of exists and you're here to bridge multiple timelines.
+Ancient Elders celebrated Rites of Passage as the next chapter of being and shifting into new identities. Hold on to the wisdom from the past and let go off guilt, shame and fear that holds you back.`, activation:"Ho raa shee ne yti u sha" },
+
+  { title:"Multidimensionality", image:"https://res.cloudinary.com/dqeukcxav/image/upload/v1773237777/multidimensionality_ybyugm.png", affirmation:"I choose to anchor my light from different directions into the heart of Gaia", message:`A multidimensional being is holding the energies of being a master of the multiverse. Think of yourself as a being in a room of infinite mirrors and you will see infinite versions of yourself. Similarly, we are multidimensional beings. Every reality you can think of exists and you're here to bridge multiple timelines.
 
 Multidimensionality is the ability to be a master of the multiverses and know that you carry infinite possibilities and gifts that go beyond present, past and future lifetimes.
 
@@ -381,14 +373,9 @@ Tapping into your multidimensional nature is key to sharing your work as a Light
 
 This is your soul's master incarnation and you now do have the powers to switch between timelines with more ease than ever before.
 
-Which multidimensional gifts are coming forward for you at this point in time?`,
-    activation: "Ey ra ee se ho na hee se"
-  },
-  {
-    title: "Spirit Allies",
-    image: "https://res.cloudinary.com/dqeukcxav/image/upload/v1773237775/spirit-allies_rodsoi.png",
-    affirmation: "I allow the tools I use to guide me ahead on this journey",
-    message: `If you are drawn to metaphysical tools and esoteric wisdom, you are on the right path. This card is coming up for you to confirm that you have a special connection with Spirit Allies.
+Which multidimensional gifts are coming forward for you at this point in time?`, activation:"Ey ra ee se ho na hee se" },
+
+  { title:"Spirit Allies", image:"https://res.cloudinary.com/dqeukcxav/image/upload/v1773237775/spirit-allies_rodsoi.png", affirmation:"I allow the tools I use to guide me ahead on this journey", message:`If you are drawn to metaphysical tools and esoteric wisdom, you are on the right path. This card is coming up for you to confirm that you have a special connection with Spirit Allies.
 
 Spirit Allies are divinational tools like crystals, oracle cards, herbs, cleansing tools and more that are often used to connect to Spirit Guides or God. You are not overtly dependent on these tools but instead you share a very special connection with them, which is why you feel so drawn to them.
 
@@ -400,14 +387,9 @@ There is a message for you — you do not have to do it all alone. It is your Gu
 
 But as much as you desire to connect to these tools, there is one thing you must remember: do not give your power away. The tools are here to assist and guide you and the energy you program them with, is the energy you will receive. But your Guides want you to remember that the magic lies inside you. It's always been there. The tools are here to help you shine that magic outward.
 
-Which tools are coming up for you lately? How can you connect with them?`,
-    activation: "hurr ha rey so ne hurr sho ya kay"
-  },
-  {
-    title: "Pleasure Path",
-    image: "https://res.cloudinary.com/dqeukcxav/image/upload/v1773237777/pleasure-path_m2s0zg.png",
-    affirmation: "I allow myself to open up and receive pleasure",
-    message: `The Pleasure Path is deeply connected to Divine Feminine energies. It is about embracing the softness and sensuality that lies within you, male or female. Receiving pleasure is not about the gender you belong to, it is about opening yourself up to receive, surrender and create.
+Which tools are coming up for you lately? How can you connect with them?`, activation:"hurr ha rey so ne hurr sho ya kay" },
+
+  { title:"Pleasure Path", image:"https://res.cloudinary.com/dqeukcxav/image/upload/v1773237777/pleasure-path_m2s0zg.png", affirmation:"I allow myself to open up and receive pleasure", message:`The Pleasure Path is deeply connected to Divine Feminine energies. It is about embracing the softness and sensuality that lies within you, male or female. Receiving pleasure is not about the gender you belong to, it is about opening yourself up to receive, surrender and create.
 
 Humans often live life on a 2x frequency. It's about instant deliveries, shopping online, condensing time and space. And while that is really helpful for modern living, it has disconnected our souls from allowing ourselves to cherish and savor the moment. Visualise holding your favourite fruit and taking a bite of the sweetness with eyes closed, allowing it to fully enter your body and being fully in the moment. This is the pathway to pleasure.
 
@@ -417,14 +399,9 @@ This card also signifies that your sensuality is increasing and the pleasure cod
 
 For you to step into the energy of pleasure, you are being guided to connect to your sensual self. Reconnecting to beauty way practices like taking a herb or floral bath or using essential oils for different purposes to brighten your mood or dressing up in a way that makes you feel beautiful will support your pleasure journey.
 
-If you are interested in diving deep into your own path to pleasure, download your Astrology chart and look up where the planet Venus lies in your chart. This is the time for surrender and connecting to the Divine Feminine codes that want to be expressed through you.`,
-    activation: "Aa se niiii reyyy ho to ke ma"
-  },
-  {
-    title: "Frequency Keeper",
-    image: "https://res.cloudinary.com/dqeukcxav/image/upload/v1773237776/frequency-keeper_ja6xec.png",
-    affirmation: "I am a portal for transmuting frequencies",
-    message: `The Frequency Keeper carries the codes for altering frequencies within and around them. They are deep feelers and can sense the energetic vibrations around them and use their gifts to shift the energies that don't serve them.
+If you are interested in diving deep into your own path to pleasure, download your Astrology chart and look up where the planet Venus lies in your chart. This is the time for surrender and connecting to the Divine Feminine codes that want to be expressed through you.`, activation:"Aa se niiii reyyy ho to ke ma" },
+
+  { title:"Frequency Keeper", image:"https://res.cloudinary.com/dqeukcxav/image/upload/v1773237776/frequency-keeper_ja6xec.png", affirmation:"I am a portal for transmuting frequencies", message:`The Frequency Keeper carries the codes for altering frequencies within and around them. They are deep feelers and can sense the energetic vibrations around them and use their gifts to shift the energies that don't serve them.
 
 This card is a reminder that your sensitivity, vulnerability, feeling too deeply does not need to be a liability. You were not wired differently. You are not broken. You don't have to fix it and learn to grow up. You are not a cry baby. This is old matrix programming. This is the lower frequency that shows up in your field and you are the transmuter.
 
@@ -434,14 +411,9 @@ The Frequency Keeper is an embodied being. For them to be able to help other Lig
 
 Your message is to open your throat chakra by asking, sharing your thoughts, drawing boundaries, celebrating yourself and inviting others to do so as well. Your voice is the most powerful tool you carry in this lifetime. When you go through a throat upgrade, it is important for you to tune in and see what aspects of the upgrades are coming forward for you.
 
-Once you embody this energy, you will be able to assist others around you too. Some of the tools that may help you are Light Language, singing, chanting, voice activations and screaming out loud to release trapped anger.`,
-    activation: "Aa lah re sheee no ya ke ri yah"
-  },
-  {
-    title: "Sangha",
-    image: "https://res.cloudinary.com/dqeukcxav/image/upload/v1773237777/sangha_rjix7o.png",
-    affirmation: "I am calling forward my Sangha who are here to walk this path with me",
-    message: `Sangha refers to soul family or community. As humans, as we have progressed and become modern, we have also become very isolated. Most of us live in nuclear setups with little to no connection to those around us. We have adapted this to be normal but it is far from the truth. We were always meant to live and be a part of communities.
+Once you embody this energy, you will be able to assist others around you too. Some of the tools that may help you are Light Language, singing, chanting, voice activations and screaming out loud to release trapped anger.`, activation:"Aa lah re sheee no ya ke ri yah" },
+
+  { title:"Sangha", image:"https://res.cloudinary.com/dqeukcxav/image/upload/v1773237777/sangha_rjix7o.png", affirmation:"I am calling forward my Sangha who are here to walk this path with me", message:`Sangha refers to soul family or community. As humans, as we have progressed and become modern, we have also become very isolated. Most of us live in nuclear setups with little to no connection to those around us. We have adapted this to be normal but it is far from the truth. We were always meant to live and be a part of communities.
 
 Our role as Lightworkers is to walk this path of enlightenment and ascension not alone and isolated but connected to our soul family and friends. We are here to connect people who have been together for lifetimes. Our energy will magnetically attract the right group of people who belong in our soul family.
 
@@ -453,14 +425,9 @@ You will recognise your soul family members because they will invoke deep feelin
 
 Your soul family members will activate something raw and ancient within you. Some of them may become lifelong allies while others may remain in your life for a short period of time. Each of them plays a unique role in your life and are here to support you unconditionally.
 
-If you have been feeling a bit lonely lately, ask your Guides to connect you to your soul family.`,
-    activation: "Sho ray hay sto ni ko yi pa yaaal"
-  },
-  {
-    title: "Deep Sleep",
-    image: "https://res.cloudinary.com/dqeukcxav/image/upload/v1773237776/deep-sleep_vzdftc.png",
-    affirmation: "I embrace this season of rest",
-    message: `Life happens in cycles. There are seasons — spring, summer, autumn and winter. The moon has its cycles. Women have monthly cycles and even our aging happens this way. Everything around us is cyclical in nature. That is how it has been designed. Even our states of consciousness have cycles.
+If you have been feeling a bit lonely lately, ask your Guides to connect you to your soul family.`, activation:"Sho ray hay sto ni ko yi pa yaaal" },
+
+  { title:"Deep Sleep", image:"https://res.cloudinary.com/dqeukcxav/image/upload/v1773237776/deep-sleep_vzdftc.png", affirmation:"I embrace this season of rest", message:`Life happens in cycles. There are seasons — spring, summer, autumn and winter. The moon has its cycles. Women have monthly cycles and even our aging happens this way. Everything around us is cyclical in nature. That is how it has been designed. Even our states of consciousness have cycles.
 
 Deep Sleep is the REM state your body experiences when you have been cut off from any mental chatter, dreams and awareness of the external world to slip into a space of peaceful rest.
 
@@ -470,14 +437,9 @@ The void is not the enemy. It is that space where creation happens. There is not
 
 This rest period was not designed for you to fear or shun, but to give you enough time to integrate the journey so far before you step into a whole new chapter of your life. Deep sleep is not the time where you force things to happen. This is the period where you recognise that everything is being woven in divine timing. Every manifestation requires a gestation period for it to align completely with the identity you carry.
 
-If you pick this card, the message you are receiving is that this is the time to allow things to unfold for your highest good. Everything is happening exactly as it was designed to. You are not being asked to do anything.`,
-    activation: "She she ni ye ki she ri hey"
-  },
-  {
-    title: "Orange Flame",
-    image: "https://res.cloudinary.com/dqeukcxav/image/upload/v1773237775/orange-flame_gt08qn.png",
-    affirmation: "I rise out of the ashes that once buried me",
-    message: `Orange Flame is the energy that is used for cleansing. When we talk about cleansing, we talk about physical as well as energy cleansing. There are many times when we tend to go in a funk-like state where we feel foggy and disrupted. We often wonder if there's any nazar or evil eye — what could have happened for our energy to get drained to this point?
+If you pick this card, the message you are receiving is that this is the time to allow things to unfold for your highest good. Everything is happening exactly as it was designed to. You are not being asked to do anything.`, activation:"She she ni ye ki she ri hey" },
+
+  { title:"Orange Flame", image:"https://res.cloudinary.com/dqeukcxav/image/upload/v1773237775/orange-flame_gt08qn.png", affirmation:"I rise out of the ashes that once buried me", message:`Orange Flame is the energy that is used for cleansing. When we talk about cleansing, we talk about physical as well as energy cleansing. There are many times when we tend to go in a funk-like state where we feel foggy and disrupted. We often wonder if there's any nazar or evil eye — what could have happened for our energy to get drained to this point?
 
 These energetic vacuums are often caused by distortions in the energetic field. We have the ability to quantum leap and break through from any limits we believe exist. But like a boomerang for us to quantum leap and jump timelines, we go through a rebirth process.
 
@@ -487,14 +449,9 @@ At this point, you can invoke the Orange Flame. The Orange Flame is invoked to c
 
 If you are receiving this card, you are being called to take off the tinted glasses and see things with a clear perspective. If you can truly cleanse and release then you no longer need to be held back but you're on the cusp of a quantum leap.
 
-You can invoke the Egyptian Goddess, Sekhmet to light the Orange Flame and help you clear the energetic gunk. You can also use havan cups to cleanse your space. This is particularly important if you are a Lightworker holding space for others.`,
-    activation: "Shay ya ho ne do ya he ka ji ho"
-  },
-  {
-    title: "The Artist",
-    image: "https://res.cloudinary.com/dqeukcxav/image/upload/v1773237776/the-artist_drz0tf.png",
-    affirmation: "I am a creative intuitive who is here to spread their art into the world",
-    message: `The Artist just is. An artist will never address themself as 'good' or 'bad', they know that art is meant to be created and shared, not judged.
+You can invoke the Egyptian Goddess, Sekhmet to light the Orange Flame and help you clear the energetic gunk. You can also use havan cups to cleanse your space. This is particularly important if you are a Lightworker holding space for others.`, activation:"Shay ya ho ne do ya he ka ji ho" },
+
+  { title:"The Artist", image:"https://res.cloudinary.com/dqeukcxav/image/upload/v1773237776/the-artist_drz0tf.png", affirmation:"I am a creative intuitive who is here to spread their art into the world", message:`The Artist just is. An artist will never address themself as 'good' or 'bad', they know that art is meant to be created and shared, not judged.
 
 This card is a call for you to change the lens on yourself from "trying to create art" to "The Artist". If you are picking this card, your identity has shifted into the artist. You're being guided to allow creativity to flow through you. This creativity need not just be what you've perfected but it is a sum of all the lessons that you've learnt and all the wisdom those lessons have got for you. This is ready to be channelled.
 
@@ -506,14 +463,9 @@ Your message is to not dilute your creativity to fit into societal expectations.
 
 Drown those outside voices and listen to the hum in your heart. You're being asked to bring your weirdness out. To shift deeper into the identity of the artist, celebrate yourself at every step of your creation. Be your own cheerleader.
 
-Art doesn't just mean painting, poetry or dancing — it's you expressing your unique genius through what lights you up. It could be a brilliant excel sheet that creates pathbreaking solutions.`,
-    activation: "Ho hum ke ya tu re um te syha"
-  },
-  {
-    title: "The System Disruptor",
-    image: "https://res.cloudinary.com/dqeukcxav/image/upload/v1773237776/system-disruptor_lvg3t8.png",
-    affirmation: "I am here to create my own path",
-    message: `The Divergent stands out. They are here to disrupt systems that are outdated and don't play a role on New Earth. The Divergent's energy carries a charge, one that can really trigger those who are not able to hold a vision.
+Art doesn't just mean painting, poetry or dancing — it's you expressing your unique genius through what lights you up. It could be a brilliant excel sheet that creates pathbreaking solutions.`, activation:"Ho hum ke ya tu re um te syha" },
+
+  { title:"The System Disruptor", image:"https://res.cloudinary.com/dqeukcxav/image/upload/v1773237776/system-disruptor_lvg3t8.png", affirmation:"I am here to create my own path", message:`The Divergent stands out. They are here to disrupt systems that are outdated and don't play a role on New Earth. The Divergent's energy carries a charge, one that can really trigger those who are not able to hold a vision.
 
 The Divergent may often feel like a black sheep. Very early on in life they may come to the realisation that they are different and don't fully fit in. They may have trouble adapting to rules and systems that do not align with them. This may lead to them rebelling against systems without knowing a way forward or conforming to ideas and beliefs that they don't stand for and creating internal chaos.
 
@@ -523,25 +475,21 @@ The Divergent may seek belonging and may often struggle to open their heart and 
 
 The Divergent may have certain shadows come up as they try to align with their mission. They may feel called to fight against those beliefs they do not subscribe to. The Divergent may either have verbal vomit where they feel that they need to speak to everyone or may completely repress their voice.
 
-Your message is to hold your vision and your path in your mind's eye. You don't need to fight every battle, don't lose sight of the big picture in trying to do so. Don't shut your heart because others won't be able to find you. You are here to find out of the box ideas and birth new thinking, not to fit into boxes.`,
-    activation: "Ul shi ke ri hu ya ja ni hi kaaash"
-  }
+Your message is to hold your vision and your path in your mind's eye. You don't need to fight every battle, don't lose sight of the big picture in trying to do so. Don't shut your heart because others won't be able to find you. You are here to find out of the box ideas and birth new thinking, not to fit into boxes.`, activation:"Ul shi ke ri hu ya ja ni hi kaaash" }
 ];
 
 // ── PAGE TRANSITIONS ──
 function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => {
-    p.classList.remove('active', 'shown');
-  });
-  const target = document.getElementById(id);
-  target.classList.add('active');
-  window.scrollTo(0, 0);
-  requestAnimationFrame(() => requestAnimationFrame(() => target.classList.add('shown')));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active','shown'));
+  const t = document.getElementById(id);
+  t.classList.add('active');
+  window.scrollTo(0,0);
+  requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('shown')));
 }
 
 // ── BUILD FAN ──
-// Mimics the reference image: cards fan from bottom-centre,
-// tightly overlapping, big enough to feel tactile
+// Matches reference image 2: cards tightly overlapping, slight arc curve,
+// mostly upright with gentle rotation — like a hand of playing cards viewed from front
 function buildFan() {
   const fan = document.getElementById('card-fan');
   fan.innerHTML = '';
@@ -549,52 +497,62 @@ function buildFan() {
   const shuffled = [...cards].sort(() => Math.random() - 0.5);
   const n = shuffled.length;
   const W = window.innerWidth;
-  const H = window.innerHeight;
 
-  // Card size — bigger on wider screens
-  const cardW = Math.min(130, Math.max(78, W / 10));
-  const cardH = cardW * 1.62;
+  // Card size
+  const cardW = Math.min(120, Math.max(72, W / 10));
+  const cardH = cardW * 1.7;
 
-  // Pivot point: bottom-centre of viewport, offset down so
-  // only top portion of cards shows (like holding a hand of cards)
-  const pivotX = W / 2;
-  // Radius: how far from pivot the card centres sit
-  const radius = Math.min(H * 0.72, W * 0.55, 500);
+  // How much each card slides behind the next (tight overlap)
+  const step = cardW * 0.58;
 
-  // Arc spans 150° centred at top (−75° to +75° from vertical)
-  const totalArc = 150;
-  const startAng  = -totalArc / 2;  // degrees from 12 o'clock
+  // Total width of the spread
+  const spreadW = cardW + step * (n - 1);
 
-  // Container height: tallest card tip above pivot
-  // All cards point upward from pivot, so we need room from y=0
-  // Pivot sits at bottom of container
-  const containerH = radius + cardH * 0.15 + 30;
+  // Arc depth: centre cards sit higher than edges
+  // We achieve this with a large-radius circle pivot below the fan
+  const arcRadius = spreadW * 2.2;   // large = shallow curve
+
+  // Container size
+  const extraTop = cardH * 0.12;     // how much higher the centre rises
+  const containerW = Math.max(spreadW + 20, W);
+  const containerH = cardH + extraTop + 20;
+  fan.style.width  = containerW + 'px';
   fan.style.height = containerH + 'px';
-  const pivotY = containerH; // pivot is at bottom of container
+
+  // Pivot below container
+  const pivotX = containerW / 2;
+  const pivotY = containerH + arcRadius;
 
   shuffled.forEach((card, i) => {
-    const pct      = n === 1 ? 0.5 : i / (n - 1);
-    const angleDeg = startAng + pct * totalArc;   // degrees from 12-o'clock
+    const pct = n === 1 ? 0.5 : i / (n - 1);
+
+    // Angle: spread across a narrow arc (about ±14°)
+    const halfArc = Math.min(14, 6 + n * 0.75);
+    const angleDeg = -halfArc + pct * halfArc * 2;
     const angleRad = angleDeg * Math.PI / 180;
 
-    // Card centre position (top of card, pointing outward from pivot)
-    const cx = pivotX + radius * Math.sin(angleRad);
-    const cy = pivotY - radius * Math.cos(angleRad);
+    // Position via circle geometry
+    const cx = pivotX + arcRadius * Math.sin(angleRad);
+    const cy = pivotY - arcRadius * Math.cos(angleRad);
+
+    // left/top anchored at card's top-left corner
+    const left = cx - cardW / 2;
+    const top  = cy - cardH;
 
     const div = document.createElement('div');
     div.className = 'card';
     div.style.width  = cardW + 'px';
-    div.style.left   = (cx - cardW / 2) + 'px';
-    div.style.top    = (cy - cardH) + 'px';    // card hangs upward from centre
-    div.style.transform        = `rotate(${angleDeg}deg)`;
-    div.style.transformOrigin  = `${cardW / 2}px ${cardH + (pivotY - cy)}px`; // pivot at bottom
+    div.style.left   = left + 'px';
+    div.style.top    = top  + 'px';
+    div.style.transform       = `rotate(${angleDeg}deg)`;
+    div.style.transformOrigin = `50% calc(100% + ${pivotY - (top + cardH)}px)`;
     div.style.zIndex = i + 1;
-    div.style.animationDelay   = (i * 0.05) + 's';
+    div.style.animationDelay  = (i * 0.045) + 's';
 
     div.innerHTML = `<img src="${backImage}" alt="card">`;
 
     div.addEventListener('mouseenter', () => {
-      div.style.transform = `rotate(${angleDeg}deg) translateY(-30px) scale(1.1)`;
+      div.style.transform = `rotate(${angleDeg}deg) translateY(-28px) scale(1.09)`;
       div.style.zIndex = 80;
     });
     div.addEventListener('mouseleave', () => {
@@ -614,8 +572,8 @@ function goToSpread() {
 }
 
 function pickCard(card) {
-  document.getElementById('result-img').src          = card.image;
-  document.getElementById('result-title').textContent = card.title;
+  document.getElementById('result-img').src             = card.image;
+  document.getElementById('result-title').textContent   = card.title;
   document.getElementById('rp-affirmation').textContent = card.affirmation;
   document.getElementById('rp-message').textContent     = card.message;
   document.getElementById('rp-activation').textContent  = card.activation;
