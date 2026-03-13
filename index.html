@@ -83,10 +83,11 @@ body::before {
 
 /* ═══════════════ PAGE 2 — SPREAD ═══════════════ */
 #page-spread {
-  justify-content: flex-start;
-  padding: 0;
-  overflow: hidden;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
 }
 .spread-header {
   position: absolute; top: 36px; left: 0; right: 0;
@@ -99,9 +100,10 @@ body::before {
 
 /* THE FAN — all cards share ONE pivot at bottom-centre */
 #fan-stage {
-  position: relative;
-  flex-shrink: 0;
-  overflow: visible;
+  position: absolute;
+  bottom: -120px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .card {
