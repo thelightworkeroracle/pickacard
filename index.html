@@ -12,31 +12,54 @@ body {
   font-family: 'Times New Roman', Times, serif;
   min-height: 100vh;
   overflow-x: hidden;
-  /* beige gradient — same for both pages, no transition needed */
-  background: linear-gradient(160deg, #f5ede0 0%, #e8d9c4 30%, #d9c9b0 60%, #c9b89c 100%);
   color: #2e2219;
+
+  /* shiny beige background */
+  background:
+    radial-gradient(ellipse at 15% 0%,   rgba(255,250,230,1)    0%, transparent 45%),
+    radial-gradient(ellipse at 85% 5%,   rgba(255,235,190,0.85) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 40%,  rgba(255,245,215,0.6)  0%, transparent 55%),
+    radial-gradient(ellipse at 5%  90%,  rgba(240,220,175,0.5)  0%, transparent 45%),
+    radial-gradient(ellipse at 95% 85%,  rgba(245,225,180,0.55) 0%, transparent 45%),
+    linear-gradient(145deg, #faf2e2 0%, #eddfc6 30%, #e1cdb2 60%, #d3b990 100%);
+}
+
+/* subtle satin sheen */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: repeating-linear-gradient(
+    108deg,
+    transparent          0%,
+    rgba(255,255,255,0.04) 1.5%,
+    transparent          3%
+  );
 }
 
 /* ══════════════════════
    PICK PAGE
 ══════════════════════ */
 #page-pick {
+  position: relative;
+  z-index: 1;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 40px 20px 0;
+  padding: 44px 20px 0;
 }
 
-/* Header */
 #header {
   text-align: center;
-  max-width: 680px;
-  margin-bottom: 18px;
+  max-width: 660px;
+  margin-bottom: 20px;
 }
 
 #header h1 {
-  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-size: clamp(1.8rem, 3.8vw, 2.8rem);
   font-weight: normal;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -45,7 +68,7 @@ body {
 }
 
 .subtitle {
-  font-size: clamp(0.62rem, 1.2vw, 0.78rem);
+  font-size: clamp(0.6rem, 1.1vw, 0.75rem);
   letter-spacing: 0.26em;
   text-transform: uppercase;
   color: #7a6350;
@@ -53,43 +76,43 @@ body {
 }
 
 .desc-box {
-  background: rgba(255,255,255,0.45);
-  border: 1px solid rgba(160,130,100,0.3);
+  background: rgba(255,255,255,0.5);
+  border: 1px solid rgba(180,150,110,0.3);
   border-radius: 12px;
-  padding: 20px 28px;
+  padding: 20px 26px;
   margin-bottom: 16px;
 }
 
 .desc {
-  font-size: clamp(0.9rem, 1.6vw, 1rem);
+  font-size: clamp(0.88rem, 1.5vw, 1rem);
   line-height: 1.85;
   font-style: italic;
   color: #3a2d22;
 }
 
 .instruction {
-  font-size: clamp(0.9rem, 1.5vw, 1.02rem);
+  font-size: clamp(0.9rem, 1.4vw, 1rem);
   letter-spacing: 0.05em;
   color: #5c4433;
   font-style: italic;
 }
 
-/* Arc spread */
-#card-arc {
+/* ── CARD FAN ── */
+#card-fan {
   position: relative;
   width: 100%;
   flex: 1;
-  min-height: 340px;
+  min-height: 360px;
 }
 
 .card {
   position: absolute;
   cursor: pointer;
   transform-origin: center bottom;
-  filter: drop-shadow(0 6px 14px rgba(0,0,0,0.25));
+  filter: drop-shadow(0 5px 12px rgba(0,0,0,0.22));
   opacity: 0;
-  animation: cardReveal 0.5s forwards;
-  transition: filter 0.25s;
+  animation: cardIn 0.45s forwards;
+  transition: filter 0.22s, transform 0.22s;
 }
 .card img {
   width: 100%;
@@ -97,192 +120,144 @@ body {
   display: block;
 }
 .card:hover {
-  filter: drop-shadow(0 14px 28px rgba(100,70,40,0.4)) brightness(1.06);
-  z-index: 50 !important;
+  filter: drop-shadow(0 14px 24px rgba(100,65,20,0.4)) brightness(1.07);
+  z-index: 60 !important;
 }
-@keyframes cardReveal {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+@keyframes cardIn {
+  from { opacity: 0; transform: var(--t) translateY(20px); }
+  to   { opacity: 1; transform: var(--t); }
 }
 
 /* ══════════════════════
    RESULT PAGE
 ══════════════════════ */
 #page-result {
+  position: relative;
+  z-index: 1;
   display: none;
   min-height: 100vh;
   padding: 0 0 80px;
+  opacity: 0;
+  transition: opacity 0.7s;
 }
+#page-result.visible { opacity: 1; }
 
-/* nav bar */
+/* top nav */
 #result-nav {
+  padding: 22px 28px 16px;
   display: flex;
   justify-content: flex-start;
-  padding: 22px 28px 10px;
 }
 
 .nav-btn {
   font-family: 'Times New Roman', Times, serif;
   font-size: 0.88rem;
   letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: #3a2d22;
-  background: rgba(255,255,255,0.55);
-  border: 1px solid rgba(160,130,100,0.4);
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(160,125,85,0.35);
   padding: 10px 24px;
   border-radius: 30px;
   cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
-  text-transform: uppercase;
+  transition: background 0.25s, transform 0.2s;
 }
-.nav-btn:hover { background: rgba(255,255,255,0.85); transform: translateY(-2px); }
+.nav-btn:hover { background: rgba(255,255,255,0.9); transform: translateY(-2px); }
 
-/* ── Stage 1: reveal ── */
-#stage-card {
+/* content column */
+#result-body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px 20px 60px;
-  text-align: center;
+  padding: 0 20px;
+  max-width: 820px;
+  margin: 0 auto;
+  gap: 24px;
 }
 
-#big-card-wrap {
-  cursor: pointer;
-  display: inline-block;
-}
-
-#chosen-card {
-  width: min(300px, 72vw);
+/* card image */
+#result-card-img {
+  width: min(260px, 68vw);
   border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  box-shadow: 0 18px 55px rgba(0,0,0,0.22);
   display: block;
   animation: floatCard 4s ease-in-out infinite;
-  transition: filter 0.3s, transform 0.3s;
-}
-#big-card-wrap:hover #chosen-card {
-  filter: brightness(1.06) drop-shadow(0 0 24px rgba(180,130,70,0.5));
-  transform: scale(1.03) translateY(-8px);
 }
 @keyframes floatCard {
   0%,100% { transform: translateY(0); }
-  50%      { transform: translateY(-14px); }
+  50%      { transform: translateY(-13px); }
 }
 
-#card-name-display {
-  margin-top: 20px;
-  font-size: clamp(1.3rem, 3vw, 1.9rem);
+/* card title */
+#result-card-title {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: normal;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #2e2219;
+  text-align: center;
 }
 
-#click-prompt {
-  margin-top: 14px;
-  font-size: 1rem;
-  font-style: italic;
-  background: rgba(255,255,255,0.55);
-  border: 1px solid rgba(160,130,100,0.35);
-  padding: 10px 28px;
-  border-radius: 30px;
-  letter-spacing: 0.04em;
-  color: #5c4433;
-  animation: pulse 2s ease-in-out infinite;
-  cursor: pointer;
-}
-@keyframes pulse {
-  0%,100% { opacity: 1; }
-  50%      { opacity: 0.5; }
-}
-
-/* ── Stage 2: full reading ── */
-#stage-reading {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 20px 80px;
-  opacity: 0;
-  transition: opacity 0.8s;
-  max-width: 820px;
-  margin: 0 auto;
-}
-#stage-reading.open  { display: flex; }
-#stage-reading.shown { opacity: 1; }
-
-#reading-card-img {
-  width: min(260px, 68vw);
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-  display: block;
-  animation: floatCard 4s ease-in-out infinite;
-  margin-bottom: 18px;
-}
-
-#reading-title-banner {
-  font-size: clamp(1.3rem, 3vw, 1.9rem);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #2e2219;
-  margin-bottom: 28px;
-}
-
-/* reading panel — white-ish card on beige background */
+/* reading panel */
 #reading-panel {
   width: 100%;
-  background: rgba(255, 252, 246, 0.92);
-  border: 1px solid rgba(160,130,100,0.3);
+  background: rgba(255, 252, 245, 0.94);
+  border: 1px solid rgba(180,148,105,0.28);
   border-radius: 16px;
   padding: 36px 38px 42px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.1);
   color: #2e2219;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.12);
 }
 
-.r-block { margin-bottom: 28px; }
+.r-block { margin-bottom: 26px; }
 .r-block:last-child { margin-bottom: 0; }
 
 .r-label {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 0.66rem;
-  letter-spacing: 0.26em;
+  font-size: 0.65rem;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: #9a7a5a;
+  color: #9a7a52;
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 9px;
 }
 
 .r-divider {
-  width: 50px;
+  width: 48px;
   height: 1px;
-  background: rgba(160,130,100,0.3);
-  margin: 0 0 28px;
+  background: rgba(160,128,88,0.28);
+  margin: 0 0 26px;
 }
 
 .r-affirmation {
-  font-size: clamp(1rem, 2vw, 1.15rem);
+  font-size: clamp(1rem, 2vw, 1.13rem);
   font-style: italic;
   color: #5c3a1e;
   line-height: 1.75;
 }
 
 .r-message {
-  font-size: clamp(0.95rem, 1.8vw, 1.05rem);
+  font-size: clamp(0.95rem, 1.7vw, 1.04rem);
   color: #2e2219;
   line-height: 2;
   white-space: pre-line;
 }
 
 .r-activation {
-  font-size: clamp(1rem, 2vw, 1.1rem);
+  font-size: clamp(1rem, 2vw, 1.08rem);
   font-style: italic;
   letter-spacing: 0.08em;
   color: #7a4e1e;
   line-height: 1.7;
 }
 
-#reading-btns {
+/* bottom buttons */
+#result-btns {
   display: flex;
-  gap: 16px;
-  margin-top: 32px;
+  gap: 14px;
   flex-wrap: wrap;
   justify-content: center;
+  padding-bottom: 20px;
 }
 
 </style>
@@ -304,7 +279,7 @@ body {
     <div class="instruction">✦ Take a deep breath and click the card you feel drawn to ✦</div>
   </div>
 
-  <div id="card-arc"></div>
+  <div id="card-fan"></div>
 
 </div>
 
@@ -315,44 +290,28 @@ body {
     <button class="nav-btn" onclick="goHome()">← Back to Cards</button>
   </div>
 
-  <!-- Stage 1 -->
-  <div id="stage-card">
-    <div id="big-card-wrap" onclick="showReading()">
-      <img id="chosen-card" src="" alt="Your card">
-    </div>
-    <div id="card-name-display"></div>
-    <div id="click-prompt" onclick="showReading()">✦ Click the card to reveal your message ✦</div>
-  </div>
-
-  <!-- Stage 2 -->
-  <div id="stage-reading">
-    <img id="reading-card-img" src="" alt="">
-    <div id="reading-title-banner"></div>
+  <div id="result-body">
+    <img id="result-card-img" src="" alt="Your card">
+    <div id="result-card-title"></div>
 
     <div id="reading-panel">
-
       <div class="r-block">
         <span class="r-label">Affirmation</span>
         <div class="r-affirmation" id="rp-affirmation"></div>
       </div>
-
       <div class="r-divider"></div>
-
       <div class="r-block">
         <span class="r-label">Message</span>
         <div class="r-message" id="rp-message"></div>
       </div>
-
       <div class="r-divider"></div>
-
       <div class="r-block">
         <span class="r-label">Activation</span>
         <div class="r-activation" id="rp-activation"></div>
       </div>
-
     </div>
 
-    <div id="reading-btns">
+    <div id="result-btns">
       <button class="nav-btn" onclick="goHome()">← Back to Cards</button>
       <button class="nav-btn" onclick="goHome()">✦ Choose Another Card ✦</button>
     </div>
@@ -547,107 +506,96 @@ Your message is to hold your vision and your path in your mind's eye. You don't 
   }
 ];
 
-let currentCard = null;
-
-// ── Build arc spread ──
-function buildCards() {
-  const arc = document.getElementById('card-arc');
-  arc.innerHTML = '';
+// ── BUILD OVERLAPPING FAN ──
+function buildFan() {
+  const fan = document.getElementById('card-fan');
+  fan.innerHTML = '';
 
   const shuffled = [...cards].sort(() => Math.random() - 0.5);
   const n = shuffled.length;
   const W = window.innerWidth;
-  const cardW = Math.min(100, Math.max(68, W / 13));
+
+  // Card sizing
+  const cardW = Math.min(105, Math.max(62, W / 14));
   const cardH = cardW * 1.62;
 
-  // Arc: radius so ends reach roughly screen edges
-  const radius = W * 0.52;
-  const arcSpan = 88; // degrees total
-  const startAngle = -arcSpan / 2;
+  // Fan geometry: cards overlap, spread as semicircle
+  // Radius scales with screen but keeps cards clustered
+  const radius = Math.min(W * 0.42, 460);
+  const totalArc = Math.min(140, 90 + n * 4); // degrees
+  const startAng = -totalArc / 2;
   const cx = W / 2;
 
-  // Height of arc container
-  const maxY = radius - radius * Math.cos((arcSpan / 2) * Math.PI / 180) + cardH + 10;
-  arc.style.height = maxY + 'px';
+  // Container height = tallest point of arc + card height
+  const topY = 0;
+  const botY = radius * (1 - Math.cos((totalArc / 2) * Math.PI / 180)) + cardH;
+  fan.style.height = (botY + 20) + 'px';
 
   shuffled.forEach((card, i) => {
-    const angleDeg = startAngle + (i / (n - 1)) * arcSpan;
+    const pct = n === 1 ? 0.5 : i / (n - 1);
+    const angleDeg = startAng + pct * totalArc;
     const angleRad = angleDeg * Math.PI / 180;
 
+    // Position on arc
     const x = cx + radius * Math.sin(angleRad);
     const y = radius - radius * Math.cos(angleRad);
 
     const div = document.createElement('div');
     div.className = 'card';
-    div.style.width  = cardW + 'px';
-    div.style.left   = (x - cardW / 2) + 'px';
-    div.style.top    = y + 'px';
+    div.style.width = cardW + 'px';
+    div.style.left  = (x - cardW / 2) + 'px';
+    div.style.top   = y + 'px';
+    div.style.setProperty('--t', `rotate(${angleDeg}deg)`);
     div.style.transform = `rotate(${angleDeg}deg)`;
-    div.style.zIndex = i;
-    div.style.animationDelay = (i * 0.06) + 's';
+    div.style.zIndex = i + 1;
+    div.style.animationDelay = (i * 0.055) + 's';
 
     div.innerHTML = `<img src="${backImage}" alt="card">`;
 
     div.addEventListener('mouseenter', () => {
-      div.style.transform = `rotate(${angleDeg}deg) translateY(-26px) scale(1.1)`;
+      div.style.transform = `rotate(${angleDeg}deg) translateY(-28px) scale(1.1)`;
+      div.style.zIndex = 60;
     });
     div.addEventListener('mouseleave', () => {
       div.style.transform = `rotate(${angleDeg}deg)`;
+      div.style.zIndex = i + 1;
     });
 
     div.onclick = () => pickCard(card);
-    arc.appendChild(div);
+    fan.appendChild(div);
   });
 }
 
-buildCards();
-window.addEventListener('resize', buildCards);
+buildFan();
+window.addEventListener('resize', buildFan);
 
-// ── Pick card ──
+// ── PICK CARD → immediately show card + full reading ──
 function pickCard(card) {
-  currentCard = card;
+  // Fill in all content
+  document.getElementById('result-card-img').src     = card.image;
+  document.getElementById('result-card-title').textContent = card.title;
+  document.getElementById('rp-affirmation').textContent    = card.affirmation;
+  document.getElementById('rp-message').textContent        = card.message;
+  document.getElementById('rp-activation').textContent     = card.activation;
 
+  // Hide pick page, show result
   document.getElementById('page-pick').style.display = 'none';
-
   const rp = document.getElementById('page-result');
   rp.style.display = 'block';
-  rp.style.opacity = '0';
-  rp.style.transition = 'opacity 0.7s';
-  setTimeout(() => { rp.style.opacity = '1'; }, 30);
-
-  document.getElementById('chosen-card').src = card.image;
-  document.getElementById('card-name-display').textContent = card.title;
-
-  document.getElementById('stage-card').style.display = 'flex';
-  const sr = document.getElementById('stage-reading');
-  sr.className = '';
-  sr.style.display = 'none';
+  window.scrollTo(0, 0);
+  setTimeout(() => rp.classList.add('visible'), 30);
 }
 
-// ── Show reading ──
-function showReading() {
-  if (!currentCard) return;
-  const card = currentCard;
-
-  document.getElementById('stage-card').style.display = 'none';
-
-  document.getElementById('reading-card-img').src = card.image;
-  document.getElementById('reading-title-banner').textContent = card.title;
-  document.getElementById('rp-affirmation').textContent = card.affirmation;
-  document.getElementById('rp-message').textContent = card.message;
-  document.getElementById('rp-activation').textContent = card.activation;
-
-  const sr = document.getElementById('stage-reading');
-  sr.classList.add('open');
-  setTimeout(() => sr.classList.add('shown'), 30);
-}
-
-// ── Go home ──
+// ── GO HOME ──
 function goHome() {
-  document.getElementById('page-result').style.display = 'none';
-  const pp = document.getElementById('page-pick');
-  pp.style.display = 'flex';
-  buildCards();
+  const rp = document.getElementById('page-result');
+  rp.classList.remove('visible');
+  setTimeout(() => {
+    rp.style.display = 'none';
+    document.getElementById('page-pick').style.display = 'flex';
+    window.scrollTo(0, 0);
+    buildFan();
+  }, 400);
 }
 
 </script>
