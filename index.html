@@ -83,11 +83,11 @@ body::before {
 
 /* ═══════════════ PAGE 2 — SPREAD ═══════════════ */
 #page-spread {
-  position: relative;
-  display: flex;
   justify-content: center;
   align-items: center;
-  overflow: visible;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
 }
 .spread-header {
   position: absolute; top: 36px; left: 0; right: 0;
@@ -100,33 +100,43 @@ body::before {
 
 /* THE FAN — all cards share ONE pivot at bottom-centre */
 #fan-stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  flex-shrink: 0;
+}
+#card-row {
   position: absolute;
-  bottom: -120px;
-  left: 50%;
-  transform: translateX(-50%);
 }
 
 .card {
-  position: absolute;
   cursor: pointer;
-  /* transform-origin set by JS to bottom-centre of card */
-  filter: drop-shadow(0 3px 8px rgba(0,0,0,0.28));
-  transition: filter 0.2s, transform 0.2s;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 2px 4px 12px rgba(0,0,0,0.28);
+  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
   opacity: 0;
-  animation: cardIn 0.45s forwards;
+  animation: cardIn 0.35s forwards;
+  flex-shrink: 0;
 }
 .card img {
-  width: 100%; border-radius: 9px;
-  display: block; pointer-events: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+.card:hover {
+  transform: translateY(-28px) scale(1.08) !important;
+  box-shadow: 0 20px 40px rgba(80,40,0,0.4);
+  filter: brightness(1.1);
+  z-index: 10;
 }
 @keyframes cardIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
-.card:hover {
-  filter: drop-shadow(0 14px 24px rgba(100,55,5,0.5)) brightness(1.1);
-  z-index: 80 !important;
-}
+
 
 /* ═══════════════ PAGE 3 — READING ═══════════════ */
 #page-reading {
@@ -200,7 +210,7 @@ body::before {
 <!-- PAGE 2 -->
 <div class="page" id="page-spread">
   <div class="spread-header"><p>Take a deep breath &amp; click the card you feel drawn to</p></div>
-  <div id="fan-stage"></div>
+  <div id="card-row"></div>
 </div>
 
 <!-- PAGE 3 -->
@@ -357,55 +367,52 @@ function showPage(id) {
 // Each card is placed at the pivot, then rotated. 
 // This creates the exact "shuffled card fan" look.
 function buildFan() {
-  const stage = document.getElementById('fan-stage');
-  stage.innerHTML = '';
+  const row = document.getElementById('card-row');
+  row.innerHTML = '';
 
   const shuffled = [...cards, ...cards, ...cards].sort(() => Math.random() - 0.5);
   const n = shuffled.length;
   const W = window.innerWidth;
   const H = window.innerHeight;
 
-  stage.style.width  = W + 'px';
-  stage.style.height = H + 'px';
-  stage.style.position = 'relative';
-  stage.style.overflow = 'visible';
+  // Card dimensions
+  const cardH = Math.min(H * 0.36, 220);
+  const cardW = Math.round(cardH / 1.65);
 
-  // Card size — big enough to actually see, like reference image
-  const cardH = Math.min(H * 0.55, 320);
-  const cardW = cardH / 1.65;
+  // How much each card peeks out from behind the next
+  const peek = Math.min(cardW * 0.38, Math.floor((W * 0.88) / n));
 
-  // Pivot sits at the very bottom-centre of the viewport
-  // All cards bottom-centre meet here, then rotate outward
-  const pivotX = W / 2;
-  const pivotY = H + 20; // just below viewport bottom
+  // Total width of spread
+  const totalW = peek * (n - 1) + cardW;
+  const startX = (W - totalW) / 2;
+  const topY   = (H - cardH) / 2;
 
-  // Arc: -65° to +65° (130° total) — like the reference card fan
-  const halfArc = 65;
+  // Container
+  row.style.cssText = `
+    position: absolute;
+    width: ${totalW}px;
+    height: ${cardH}px;
+    left: ${startX}px;
+    top: ${topY}px;
+  `;
 
   shuffled.forEach((card, i) => {
-    const pct = n === 1 ? 0.5 : i / (n - 1);
-    const angleDeg = -halfArc + pct * halfArc * 2;
-
-    // Place every card with its bottom-centre at the pivot
-    const left = pivotX - cardW / 2;
-    const top  = pivotY - cardH;
-
     const div = document.createElement('div');
-    div.className = 'card';
     div.style.cssText = `
-      position:absolute;
-      width:${cardW}px;
-      height:${cardH}px;
-      left:${left}px;
-      top:${top}px;
-      transform-origin:50% 100%;
-      transform:rotate(${angleDeg}deg);
-      z-index:${i + 1};
-      animation-delay:${(i * 0.018).toFixed(3)}s;
-      border-radius:10px;
-      overflow:hidden;
-      box-shadow:2px 2px 8px rgba(0,0,0,0.35);
-      cursor:pointer;
+      position: absolute;
+      width: ${cardW}px;
+      height: ${cardH}px;
+      left: ${i * peek}px;
+      top: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 3px 0 10px rgba(0,0,0,0.18);
+      cursor: pointer;
+      z-index: ${i + 1};
+      transition: transform 0.2s, box-shadow 0.2s, z-index 0s;
+      opacity: 0;
+      animation: cardIn 0.3s forwards;
+      animation-delay: ${(i * 0.02).toFixed(2)}s;
     `;
 
     const img = document.createElement('img');
@@ -414,20 +421,18 @@ function buildFan() {
     div.appendChild(img);
 
     div.addEventListener('mouseenter', () => {
-      div.style.transform = `rotate(${angleDeg}deg) translateY(-30px) scale(1.1)`;
-      div.style.zIndex = 200;
-      div.style.boxShadow = '0 20px 40px rgba(80,40,0,0.5)';
-      div.style.filter = 'brightness(1.12)';
+      div.style.transform = 'translateY(-30px)';
+      div.style.zIndex = 100;
+      div.style.boxShadow = '0 20px 35px rgba(80,40,0,0.35)';
     });
     div.addEventListener('mouseleave', () => {
-      div.style.transform = `rotate(${angleDeg}deg)`;
+      div.style.transform = '';
       div.style.zIndex = i + 1;
-      div.style.boxShadow = '2px 2px 8px rgba(0,0,0,0.35)';
-      div.style.filter = '';
+      div.style.boxShadow = '3px 0 10px rgba(0,0,0,0.18)';
     });
 
     div.onclick = () => pickCard(card);
-    stage.appendChild(div);
+    row.appendChild(div);
   });
 }
 
