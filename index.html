@@ -13,18 +13,16 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   color: #2e2219;
-
-  /* shiny beige background */
   background:
-    radial-gradient(ellipse at 15% 0%,   rgba(255,250,230,1)    0%, transparent 45%),
-    radial-gradient(ellipse at 85% 5%,   rgba(255,235,190,0.85) 0%, transparent 45%),
-    radial-gradient(ellipse at 50% 40%,  rgba(255,245,215,0.6)  0%, transparent 55%),
-    radial-gradient(ellipse at 5%  90%,  rgba(240,220,175,0.5)  0%, transparent 45%),
-    radial-gradient(ellipse at 95% 85%,  rgba(245,225,180,0.55) 0%, transparent 45%),
-    linear-gradient(145deg, #faf2e2 0%, #eddfc6 30%, #e1cdb2 60%, #d3b990 100%);
+    radial-gradient(ellipse at 15%  0%,  rgba(255,252,232,1)    0%, transparent 45%),
+    radial-gradient(ellipse at 85%  5%,  rgba(255,237,192,0.85) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 45%,  rgba(255,247,218,0.6)  0%, transparent 55%),
+    radial-gradient(ellipse at 5%  90%,  rgba(240,222,178,0.5)  0%, transparent 45%),
+    radial-gradient(ellipse at 95% 85%,  rgba(245,227,182,0.55) 0%, transparent 45%),
+    linear-gradient(145deg, #faf3e3 0%, #eedfc7 30%, #e2cfb4 60%, #d4ba92 100%);
 }
 
-/* subtle satin sheen */
+/* satin sheen */
 body::before {
   content: '';
   position: fixed;
@@ -33,154 +31,172 @@ body::before {
   z-index: 0;
   background: repeating-linear-gradient(
     108deg,
-    transparent          0%,
-    rgba(255,255,255,0.04) 1.5%,
-    transparent          3%
+    transparent            0%,
+    rgba(255,255,255,0.045) 1.5%,
+    transparent            3%
   );
 }
 
-/* ══════════════════════
-   PICK PAGE
-══════════════════════ */
-#page-pick {
+/* shared page wrapper */
+.page {
   position: relative;
   z-index: 1;
   min-height: 100vh;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
+.page.active { display: flex; }
+
+/* fade in/out */
+.page { opacity: 0; transition: opacity 0.65s; }
+.page.shown { opacity: 1; }
+
+/* ═══════════════════════════════
+   PAGE 1 — INTRO
+═══════════════════════════════ */
+#page-intro {
+  justify-content: center;
+  padding: 50px 24px 60px;
+  text-align: center;
+}
+
+.intro-inner {
+  max-width: 680px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 44px 20px 0;
+  gap: 22px;
 }
 
-#header {
-  text-align: center;
-  max-width: 660px;
-  margin-bottom: 20px;
-}
-
-#header h1 {
-  font-size: clamp(1.8rem, 3.8vw, 2.8rem);
+.intro-inner h1 {
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
   font-weight: normal;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #2e2219;
-  margin-bottom: 6px;
+  line-height: 1.2;
 }
 
-.subtitle {
-  font-size: clamp(0.6rem, 1.1vw, 0.75rem);
-  letter-spacing: 0.26em;
+.intro-subtitle {
+  font-size: clamp(0.62rem, 1.1vw, 0.76rem);
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: #7a6350;
-  margin-bottom: 22px;
 }
 
-.desc-box {
-  background: rgba(255,255,255,0.5);
-  border: 1px solid rgba(180,150,110,0.3);
-  border-radius: 12px;
-  padding: 20px 26px;
-  margin-bottom: 16px;
+.intro-divider {
+  width: 60px;
+  height: 1px;
+  background: rgba(160,125,80,0.4);
 }
 
-.desc {
-  font-size: clamp(0.88rem, 1.5vw, 1rem);
-  line-height: 1.85;
+.intro-desc {
+  background: rgba(255,255,255,0.52);
+  border: 1px solid rgba(180,148,105,0.3);
+  border-radius: 14px;
+  padding: 24px 30px;
+  font-size: clamp(0.9rem, 1.6vw, 1.02rem);
+  line-height: 1.9;
   font-style: italic;
   color: #3a2d22;
+  text-align: center;
 }
 
-.instruction {
-  font-size: clamp(0.9rem, 1.4vw, 1rem);
-  letter-spacing: 0.05em;
-  color: #5c4433;
+.draw-btn {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #2e2219;
+  background: rgba(255,255,255,0.65);
+  border: 1.5px solid rgba(160,120,70,0.5);
+  padding: 16px 48px;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+  box-shadow: 0 4px 20px rgba(160,120,60,0.15);
+}
+.draw-btn:hover {
+  background: rgba(255,255,255,0.92);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(160,120,60,0.25);
+}
+
+/* ═══════════════════════════════
+   PAGE 2 — CARD SPREAD
+═══════════════════════════════ */
+#page-spread {
+  justify-content: flex-start;
+  padding: 36px 0 0;
+}
+
+.spread-header {
+  text-align: center;
+  margin-bottom: 10px;
+  padding: 0 20px;
+}
+
+.spread-header p {
+  font-size: clamp(0.92rem, 1.5vw, 1.05rem);
   font-style: italic;
+  color: #5c4433;
+  letter-spacing: 0.04em;
 }
 
-/* ── CARD FAN ── */
+/* Fan container */
 #card-fan {
   position: relative;
   width: 100%;
   flex: 1;
-  min-height: 360px;
+  /* height set by JS */
 }
 
 .card {
   position: absolute;
   cursor: pointer;
   transform-origin: center bottom;
-  filter: drop-shadow(0 5px 12px rgba(0,0,0,0.22));
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.28));
   opacity: 0;
-  animation: cardIn 0.45s forwards;
-  transition: filter 0.22s, transform 0.22s;
+  animation: cardIn 0.4s forwards;
+  transition: filter 0.2s;
 }
 .card img {
   width: 100%;
-  border-radius: 9px;
+  border-radius: 8px;
   display: block;
 }
 .card:hover {
-  filter: drop-shadow(0 14px 24px rgba(100,65,20,0.4)) brightness(1.07);
-  z-index: 60 !important;
+  filter: drop-shadow(0 14px 22px rgba(100,60,10,0.45)) brightness(1.08);
+  z-index: 80 !important;
 }
 @keyframes cardIn {
-  from { opacity: 0; transform: var(--t) translateY(20px); }
-  to   { opacity: 1; transform: var(--t); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-/* ══════════════════════
-   RESULT PAGE
-══════════════════════ */
-#page-result {
-  position: relative;
-  z-index: 1;
-  display: none;
-  min-height: 100vh;
-  padding: 0 0 80px;
-  opacity: 0;
-  transition: opacity 0.7s;
-}
-#page-result.visible { opacity: 1; }
-
-/* top nav */
-#result-nav {
-  padding: 22px 28px 16px;
-  display: flex;
+/* ═══════════════════════════════
+   PAGE 3 — READING
+═══════════════════════════════ */
+#page-reading {
   justify-content: flex-start;
+  padding: 30px 20px 80px;
 }
 
-.nav-btn {
-  font-family: 'Times New Roman', Times, serif;
-  font-size: 0.88rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #3a2d22;
-  background: rgba(255,255,255,0.6);
-  border: 1px solid rgba(160,125,85,0.35);
-  padding: 10px 24px;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: background 0.25s, transform 0.2s;
-}
-.nav-btn:hover { background: rgba(255,255,255,0.9); transform: translateY(-2px); }
-
-/* content column */
-#result-body {
+.reading-inner {
+  width: 100%;
+  max-width: 820px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 20px;
-  max-width: 820px;
-  margin: 0 auto;
-  gap: 24px;
+  gap: 22px;
 }
 
 /* card image */
-#result-card-img {
-  width: min(260px, 68vw);
+#result-img {
+  width: min(270px, 70vw);
   border-radius: 16px;
   box-shadow: 0 18px 55px rgba(0,0,0,0.22);
-  display: block;
   animation: floatCard 4s ease-in-out infinite;
 }
 @keyframes floatCard {
@@ -188,9 +204,8 @@ body::before {
   50%      { transform: translateY(-13px); }
 }
 
-/* card title */
-#result-card-title {
-  font-size: clamp(1.4rem, 3vw, 2rem);
+#result-title {
+  font-size: clamp(1.5rem, 3.2vw, 2.1rem);
   font-weight: normal;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -201,7 +216,7 @@ body::before {
 /* reading panel */
 #reading-panel {
   width: 100%;
-  background: rgba(255, 252, 245, 0.94);
+  background: rgba(255, 253, 246, 0.94);
   border: 1px solid rgba(180,148,105,0.28);
   border-radius: 16px;
   padding: 36px 38px 42px;
@@ -230,7 +245,7 @@ body::before {
 }
 
 .r-affirmation {
-  font-size: clamp(1rem, 2vw, 1.13rem);
+  font-size: clamp(1rem, 1.9vw, 1.12rem);
   font-style: italic;
   color: #5c3a1e;
   line-height: 1.75;
@@ -244,55 +259,65 @@ body::before {
 }
 
 .r-activation {
-  font-size: clamp(1rem, 2vw, 1.08rem);
+  font-size: clamp(1rem, 1.9vw, 1.08rem);
   font-style: italic;
   letter-spacing: 0.08em;
   color: #7a4e1e;
   line-height: 1.7;
 }
 
-/* bottom buttons */
-#result-btns {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding-bottom: 20px;
+/* bottom button */
+.again-btn {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #2e2219;
+  background: rgba(255,255,255,0.65);
+  border: 1px solid rgba(160,120,70,0.4);
+  padding: 13px 36px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.2s;
+}
+.again-btn:hover {
+  background: rgba(255,255,255,0.92);
+  transform: translateY(-2px);
 }
 
 </style>
 </head>
 <body>
 
-<!-- ══ PICK PAGE ══ -->
-<div id="page-pick">
-
-  <div id="header">
+<!-- ═══ PAGE 1 — INTRO ═══ -->
+<div class="page" id="page-intro">
+  <div class="intro-inner">
     <h1>The Lightworkers Oracle</h1>
-    <div class="subtitle">Codes of Soul Remembrance &amp; Activation</div>
-    <div class="desc-box">
-      <div class="desc">
-        This is a channeled Oracle Deck for Lightworkers, spiritual leaders, healers, visionaries, and souls awakening to their mission during this time of planetary shift. It offers visual, energetic, and channeled transmissions to bypass the logical mind and awaken remembrance at the soul level.<br><br>
-        Through these cards, you will feel supported, guided, and inspired to walk your unique path, seed New Earth realities, and embody the highest version of yourself with ease, trust, and devotion.
-      </div>
+    <div class="intro-subtitle">Codes of Soul Remembrance &amp; Activation</div>
+    <div class="intro-divider"></div>
+    <div class="intro-desc">
+      This is a channeled Oracle Deck for Lightworkers, spiritual leaders, healers, visionaries, and souls awakening to their mission during this time of planetary shift. It offers visual, energetic, and channeled transmissions to bypass the logical mind and awaken remembrance at the soul level.<br><br>
+      Through these cards, you will feel supported, guided, and inspired to walk your unique path, seed New Earth realities, and embody the highest version of yourself with ease, trust, and devotion.
     </div>
-    <div class="instruction">✦ Take a deep breath and click the card you feel drawn to ✦</div>
+    <div class="intro-divider"></div>
+    <button class="draw-btn" onclick="goToSpread()">✦ Draw a Card ✦</button>
   </div>
-
-  <div id="card-fan"></div>
-
 </div>
 
-<!-- ══ RESULT PAGE ══ -->
-<div id="page-result">
-
-  <div id="result-nav">
-    <button class="nav-btn" onclick="goHome()">← Back to Cards</button>
+<!-- ═══ PAGE 2 — SPREAD ═══ -->
+<div class="page" id="page-spread">
+  <div class="spread-header">
+    <p>Take a deep breath &amp; click the card you feel drawn to</p>
   </div>
+  <div id="card-fan"></div>
+</div>
 
-  <div id="result-body">
-    <img id="result-card-img" src="" alt="Your card">
-    <div id="result-card-title"></div>
+<!-- ═══ PAGE 3 — READING ═══ -->
+<div class="page" id="page-reading">
+  <div class="reading-inner">
+
+    <img id="result-img" src="" alt="Your card">
+    <div id="result-title"></div>
 
     <div id="reading-panel">
       <div class="r-block">
@@ -311,12 +336,9 @@ body::before {
       </div>
     </div>
 
-    <div id="result-btns">
-      <button class="nav-btn" onclick="goHome()">← Back to Cards</button>
-      <button class="nav-btn" onclick="goHome()">✦ Choose Another Card ✦</button>
-    </div>
-  </div>
+    <button class="again-btn" onclick="goToSpread()">✦ Choose Another Card ✦</button>
 
+  </div>
 </div>
 
 <script>
@@ -506,7 +528,20 @@ Your message is to hold your vision and your path in your mind's eye. You don't 
   }
 ];
 
-// ── BUILD OVERLAPPING FAN ──
+// ── PAGE TRANSITIONS ──
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => {
+    p.classList.remove('active', 'shown');
+  });
+  const target = document.getElementById(id);
+  target.classList.add('active');
+  window.scrollTo(0, 0);
+  requestAnimationFrame(() => requestAnimationFrame(() => target.classList.add('shown')));
+}
+
+// ── BUILD FAN ──
+// Mimics the reference image: cards fan from bottom-centre,
+// tightly overlapping, big enough to feel tactile
 function buildFan() {
   const fan = document.getElementById('card-fan');
   fan.innerHTML = '';
@@ -514,47 +549,53 @@ function buildFan() {
   const shuffled = [...cards].sort(() => Math.random() - 0.5);
   const n = shuffled.length;
   const W = window.innerWidth;
+  const H = window.innerHeight;
 
-  // Card sizing
-  const cardW = Math.min(105, Math.max(62, W / 14));
+  // Card size — bigger on wider screens
+  const cardW = Math.min(130, Math.max(78, W / 10));
   const cardH = cardW * 1.62;
 
-  // Fan geometry: cards overlap, spread as semicircle
-  // Radius scales with screen but keeps cards clustered
-  const radius = Math.min(W * 0.42, 460);
-  const totalArc = Math.min(140, 90 + n * 4); // degrees
-  const startAng = -totalArc / 2;
-  const cx = W / 2;
+  // Pivot point: bottom-centre of viewport, offset down so
+  // only top portion of cards shows (like holding a hand of cards)
+  const pivotX = W / 2;
+  // Radius: how far from pivot the card centres sit
+  const radius = Math.min(H * 0.72, W * 0.55, 500);
 
-  // Container height = tallest point of arc + card height
-  const topY = 0;
-  const botY = radius * (1 - Math.cos((totalArc / 2) * Math.PI / 180)) + cardH;
-  fan.style.height = (botY + 20) + 'px';
+  // Arc spans 150° centred at top (−75° to +75° from vertical)
+  const totalArc = 150;
+  const startAng  = -totalArc / 2;  // degrees from 12 o'clock
+
+  // Container height: tallest card tip above pivot
+  // All cards point upward from pivot, so we need room from y=0
+  // Pivot sits at bottom of container
+  const containerH = radius + cardH * 0.15 + 30;
+  fan.style.height = containerH + 'px';
+  const pivotY = containerH; // pivot is at bottom of container
 
   shuffled.forEach((card, i) => {
-    const pct = n === 1 ? 0.5 : i / (n - 1);
-    const angleDeg = startAng + pct * totalArc;
+    const pct      = n === 1 ? 0.5 : i / (n - 1);
+    const angleDeg = startAng + pct * totalArc;   // degrees from 12-o'clock
     const angleRad = angleDeg * Math.PI / 180;
 
-    // Position on arc
-    const x = cx + radius * Math.sin(angleRad);
-    const y = radius - radius * Math.cos(angleRad);
+    // Card centre position (top of card, pointing outward from pivot)
+    const cx = pivotX + radius * Math.sin(angleRad);
+    const cy = pivotY - radius * Math.cos(angleRad);
 
     const div = document.createElement('div');
     div.className = 'card';
-    div.style.width = cardW + 'px';
-    div.style.left  = (x - cardW / 2) + 'px';
-    div.style.top   = y + 'px';
-    div.style.setProperty('--t', `rotate(${angleDeg}deg)`);
-    div.style.transform = `rotate(${angleDeg}deg)`;
+    div.style.width  = cardW + 'px';
+    div.style.left   = (cx - cardW / 2) + 'px';
+    div.style.top    = (cy - cardH) + 'px';    // card hangs upward from centre
+    div.style.transform        = `rotate(${angleDeg}deg)`;
+    div.style.transformOrigin  = `${cardW / 2}px ${cardH + (pivotY - cy)}px`; // pivot at bottom
     div.style.zIndex = i + 1;
-    div.style.animationDelay = (i * 0.055) + 's';
+    div.style.animationDelay   = (i * 0.05) + 's';
 
     div.innerHTML = `<img src="${backImage}" alt="card">`;
 
     div.addEventListener('mouseenter', () => {
-      div.style.transform = `rotate(${angleDeg}deg) translateY(-28px) scale(1.1)`;
-      div.style.zIndex = 60;
+      div.style.transform = `rotate(${angleDeg}deg) translateY(-30px) scale(1.1)`;
+      div.style.zIndex = 80;
     });
     div.addEventListener('mouseleave', () => {
       div.style.transform = `rotate(${angleDeg}deg)`;
@@ -566,37 +607,26 @@ function buildFan() {
   });
 }
 
-buildFan();
-window.addEventListener('resize', buildFan);
+// ── NAVIGATION ──
+function goToSpread() {
+  buildFan();
+  showPage('page-spread');
+}
 
-// ── PICK CARD → immediately show card + full reading ──
 function pickCard(card) {
-  // Fill in all content
-  document.getElementById('result-card-img').src     = card.image;
-  document.getElementById('result-card-title').textContent = card.title;
-  document.getElementById('rp-affirmation').textContent    = card.affirmation;
-  document.getElementById('rp-message').textContent        = card.message;
-  document.getElementById('rp-activation').textContent     = card.activation;
-
-  // Hide pick page, show result
-  document.getElementById('page-pick').style.display = 'none';
-  const rp = document.getElementById('page-result');
-  rp.style.display = 'block';
-  window.scrollTo(0, 0);
-  setTimeout(() => rp.classList.add('visible'), 30);
+  document.getElementById('result-img').src          = card.image;
+  document.getElementById('result-title').textContent = card.title;
+  document.getElementById('rp-affirmation').textContent = card.affirmation;
+  document.getElementById('rp-message').textContent     = card.message;
+  document.getElementById('rp-activation').textContent  = card.activation;
+  showPage('page-reading');
 }
 
-// ── GO HOME ──
-function goHome() {
-  const rp = document.getElementById('page-result');
-  rp.classList.remove('visible');
-  setTimeout(() => {
-    rp.style.display = 'none';
-    document.getElementById('page-pick').style.display = 'flex';
-    window.scrollTo(0, 0);
-    buildFan();
-  }, 400);
-}
+// ── INIT ──
+showPage('page-intro');
+window.addEventListener('resize', () => {
+  if (document.getElementById('page-spread').classList.contains('active')) buildFan();
+});
 
 </script>
 </body>
